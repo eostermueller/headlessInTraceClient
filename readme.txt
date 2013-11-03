@@ -27,6 +27,7 @@ Main Features
 	For details, see src/test/java/org/intrace/client/test/level3/request/TestMultiThreadedRequestEventCollection.java 
 	Feature 3, above, was built using this customize-able factory.
 
+6) More than 30 JUnit tests.
 
 Environment
 ---------------------------------
