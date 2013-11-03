@@ -1,0 +1,285 @@
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Spring JDBC 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ example.webapp ---
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ example.webapp ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 2 resources
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ example.webapp ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 12 source files to /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/example.webapp/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ example.webapp ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 0 resource
+[INFO] skip non existing resourceDirectory /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/example.webapp/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ example.webapp ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 2 source files to /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/example.webapp/target/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ example.webapp ---
+[INFO] Surefire report directory: /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/example.webapp/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running example.webapp.dao.TestJdbcEventDAO
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.964 sec
+Running example.webapp.dao.TestJdbcLocationDAO
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.039 sec
+
+Results :
+
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] 
+[INFO] --- maven-war-plugin:2.2:war (default-war) @ example.webapp ---
+[INFO] Packaging webapp
+[INFO] Assembling webapp [example.webapp] in [/Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/example.webapp/target/example.webapp-1.0-SNAPSHOT]
+[INFO] Processing war project
+[INFO] Copying webapp resources [/Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/example.webapp/src/main/webapp]
+[INFO] Webapp assembled in [86 msecs]
+[INFO] Building war: /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/example.webapp/target/example.webapp-1.0-SNAPSHOT.war
+[INFO] WEB-INF/web.xml already added, skipping
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 4.000s
+[INFO] Finished at: Sun Nov 03 12:35:45 CST 2013
+[INFO] Final Memory: 16M/39M
+[INFO] ------------------------------------------------------------------------
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building headlessInTraceClient 0.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ headlessInTraceClient ---
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ headlessInTraceClient ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/Headless InTrace Client Source
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ headlessInTraceClient ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 77 source files to /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/target/classes
+[WARNING] /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/src/test/java/org/intrace/client/test/level1/connection/TestHostPortTextl.java: /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/src/test/java/org/intrace/client/test/level1/connection/TestHostPortTextl.java uses or overrides a deprecated API.
+[WARNING] /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/src/test/java/org/intrace/client/test/level1/connection/TestHostPortTextl.java: Recompile with -Xlint:deprecation for details.
+[WARNING] /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/src/test/java/org/intrace/client/test/level1/request/TestMultiThreadedRequestSeparator.java: Some input files use unchecked or unsafe operations.
+[WARNING] /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/src/test/java/org/intrace/client/test/level1/request/TestMultiThreadedRequestSeparator.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ headlessInTraceClient ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ headlessInTraceClient ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.16:test (default-test) @ headlessInTraceClient ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ headlessInTraceClient ---
+[INFO] Building jar: /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/target/headlessInTraceClient-0.0.1-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 2.790s
+[INFO] Finished at: Sun Nov 03 12:35:49 CST 2013
+[INFO] Final Memory: 12M/37M
+[INFO] ------------------------------------------------------------------------
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building headlessInTraceClient 0.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-antrun-plugin:1.7:run (default-cli) @ headlessInTraceClient ---
+[INFO] Executing tasks
+
+main:
+     [java] ## Loaded InTrace Agent.
+     [java] ## InTrace Agent listening on port 9123
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building headlessInTraceClient 0.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-antrun-plugin:1.7:run (default-cli) @ headlessInTraceClient ---
+~/Documents/src/jsource/headlessInTraceClient/example.webapp ~/Documents/src/jsource/headlessInTraceClient ~/Documents/src/jsource/headlessInTraceClient ~/Documents/src/jsource/headlessInTraceClient/example.webapp
+[INFO] Executing tasks
+
+main:
+     [java] ## Loaded InTrace Agent.
+     [java] ## Unable to listen on port: 9123
+     [java] ## InTrace Agent listening on port 9124
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Spring JDBC 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-antrun-plugin:1.7:run (default-cli) @ example.webapp ---
+
+
+--------------------------------
+Expected output for running tests:
+
+9123/tcp open unknown
+9124/tcp open unknown
+9125/tcp open unknown
+
+Expected output for stopped tests:
+
+9123/tcp closed unknown
+9124/tcp closed unknown
+9125/tcp closed unknown
+
+--------------------------------
+Actual output:
+--------------------------------
+
+9123/tcp open  unknown
+[INFO] Executing tasks
+
+main:
+9124/tcp open  unknown
+9125/tcp closed unknown
+
+     [java] ## Loaded InTrace Agent.
+     [java] SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+     [java] SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder f## Unable to listen on port: 9123
+     [java] ## Unable to listen on port: 9124
+     [java] ## InTrace Agent listening on port 9125
+     [java] or further details.
+     [java] 2013-11-03 12:35:56.402:INFO:oejs.Server:jetty-8.1.8.v20121106
+     [java] >>> STARTING EMBEDDED JETTY SERVER, PRESS ANY KEY TO STOP
+     [java] 2013-11-03 12:35:56.573:INFO:oejw.StandardDescriptorProcessor:NO JSP Support for /test, did not find org.apache.jasper.servlet.JspServlet
+     [java] Null identity service, trying login service: null
+     [java] Finding identity service: null
+     [java] 2013-11-03 12:35:56.643:INFO:oejsh.ContextHandler:started o.e.j.w.WebAppContext{/test,file:/Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/example.webapp/src/main/webapp/},src/main/webapp
+     [java] 2013-11-03 12:35:56.643:INFO:oejsh.ContextHandler:started o.e.j.w.WebAppContext{/test,file:/Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/example.webapp/src/main/webapp/},src/main/webapp
+     [java] 2013-11-03 12:35:56.665:INFO:/test:Initializing Spring root WebApplicationContext
+     [java] Nov 03, 2013 12:35:56 PM org.springframework.web.context.ContextLoader initWebApplicationContext
+     [java] INFO: Root WebApplicationContext: initialization started
+     [java] Nov 03, 2013 12:35:56 PM org.springframework.context.support.AbstractApplicationContext prepareRefresh
+     [java] INFO: Refreshing Root WebApplicationContext: startup date [Sun Nov 03 12:35:56 CST 2013]; root of context hierarchy
+     [java] Nov 03, 2013 12:35:56 PM org.springframework.beans.factory.xml.XmlBeanDefinitionReader loadBeanDefinitions
+     [java] INFO: Loading XML bean definitions from class path resource [applicationContext-servlet.xml]
+     [java] Nov 03, 2013 12:35:57 PM org.springframework.beans.factory.support.DefaultListableBeanFactory preInstantiateSingletons
+     [java] INFO: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@3f19c149: defining beans [dataSource,org.springframework.aop.config.internalAutoProxyCreator,org.springframework.transaction.annotation.AnnotationTransactionAttributeSource#0,org.springframework.transaction.interceptor.TransactionInterceptor#0,org.springframework.transaction.config.internalTransactionAdvisor,transactionManager,eventDao,locationDao,example.webapp.util.DatabaseInit#0]; root of factory hierarchy
+     [java] Nov 03, 2013 12:35:57 PM org.springframework.web.context.ContextLoader initWebApplicationContext
+     [java] INFO: Root WebApplicationContext: initialization completed in 702 ms
+     [java] 2013-11-03 12:35:57.374:INFO:oejsh.ContextHandler:started o.e.j.w.WebAppContext{/test,file:/Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/example.webapp/src/main/webapp/},src/main/webapp
+     [java] 2013-11-03 12:35:57.398:INFO:/test:Initializing Spring FrameworkServlet 'applicationContext'
+     [java] Nov 03, 2013 12:35:57 PM org.springframework.web.servlet.FrameworkServlet initServletBean
+     [java] INFO: FrameworkServlet 'applicationContext': initialization started
+     [java] Nov 03, 2013 12:35:57 PM org.springframework.context.support.AbstractApplicationContext prepareRefresh
+     [java] INFO: Refreshing WebApplicationContext for namespace 'applicationContext-servlet': startup date [Sun Nov 03 12:35:57 CST 2013]; parent: Root WebApplicationContext
+     [java] Nov 03, 2013 12:35:57 PM org.springframework.beans.factory.xml.XmlBeanDefinitionReader loadBeanDefinitions
+     [java] INFO: Loading XML bean definitions from ServletContext resource [/WEB-INF/applicationContext-servlet.xml]
+     [java] Nov 03, 2013 12:35:57 PM org.springframework.beans.factory.support.DefaultListableBeanFactory preInstantiateSingletons
+     [java] INFO: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@71e2b09b: defining beans [dataSource,org.springframework.aop.config.internalAutoProxyCreator,org.springframework.transaction.annotation.AnnotationTransactionAttributeSource#0,org.springframework.transaction.interceptor.TransactionInterceptor#0,org.springframework.transaction.config.internalTransactionAdvisor,transactionManager,eventDao,locationDao,example.webapp.util.DatabaseInit#0]; parent: org.springframework.beans.factory.support.DefaultListableBeanFactory@3f19c149
+     [java] Nov 03, 2013 12:35:57 PM org.springframework.beans.factory.xml.XmlBeanDefinitionReader loadBeanDefinitions
+     [java] INFO: Loading XML bean definitions from class path resource [org/springframework/jdbc/support/sql-error-codes.xml]
+     [java] Nov 03, 2013 12:35:57 PM org.springframework.jdbc.support.SQLErrorCodesFactory <init>
+     [java] INFO: SQLErrorCodes loaded: [DB2, Derby, H2, HSQL, Informix, MS-SQL, MySQL, Oracle, PostgreSQL, Sybase]
+     [java] WHoops!  exception while initializing the db.
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building headlessInTraceClient 0.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+     [java] Nov 03, 2013 12:35:57 PM org.springframework.web.servlet.FrameworkServlet initServletBean
+     [java] INFO: FrameworkServlet 'applicationContext': initialization completed in 442 ms
+     [java] 2013-11-03 12:35:57.846:INFO:oejs.AbstractConnector:Started SocketConnector@0.0.0.0:8080
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ headlessInTraceClient ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/Headless InTrace Client Source
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ headlessInTraceClient ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 77 source files to /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/target/classes
+[WARNING] /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/src/test/java/org/intrace/client/test/level1/connection/TestHostPortTextl.java: /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/src/test/java/org/intrace/client/test/level1/connection/TestHostPortTextl.java uses or overrides a deprecated API.
+[WARNING] /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/src/test/java/org/intrace/client/test/level1/connection/TestHostPortTextl.java: Recompile with -Xlint:deprecation for details.
+[WARNING] /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/src/test/java/org/intrace/client/test/level1/request/TestMultiThreadedRequestSeparator.java: Some input files use unchecked or unsafe operations.
+[WARNING] /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/src/test/java/org/intrace/client/test/level1/request/TestMultiThreadedRequestSeparator.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ headlessInTraceClient ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ headlessInTraceClient ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 18 source files to /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/target/test-classes
+[WARNING] /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/src/test/java/org/intrace/client/test/level1/connection/TestHostPortTextl.java: /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/src/test/java/org/intrace/client/test/level1/connection/TestHostPortTextl.java uses or overrides a deprecated API.
+[WARNING] /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/src/test/java/org/intrace/client/test/level1/connection/TestHostPortTextl.java: Recompile with -Xlint:deprecation for details.
+[WARNING] /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/src/test/java/org/intrace/client/test/level2/connection/lowLevel/TestMultipleConnections_requiresTwoExternalAgents.java: Some input files use unchecked or unsafe operations.
+[WARNING] /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/src/test/java/org/intrace/client/test/level2/connection/lowLevel/TestMultipleConnections_requiresTwoExternalAgents.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.16:test (default-test) @ headlessInTraceClient ---
+[INFO] Surefire report directory: /Users/erikostermueller/Documents/src/jsource/headlessInTraceClient/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running org.intrace.client.test.level1.connection.TestHostPortTextl
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.043 sec - in org.intrace.client.test.level1.connection.TestHostPortTextl
+Running org.intrace.client.test.level1.model.TestEventParsing
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 sec - in org.intrace.client.test.level1.model.TestEventParsing
+Running org.intrace.client.test.level1.model.TestEventParsingWithLineNumbers
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec - in org.intrace.client.test.level1.model.TestEventParsingWithLineNumbers
+Running org.intrace.client.test.level1.request.TestMultiThreadedRequestSeparator
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.697 sec - in org.intrace.client.test.level1.request.TestMultiThreadedRequestSeparator
+Running org.intrace.client.test.level1.request.TestRequestSeparator
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec - in org.intrace.client.test.level1.request.TestRequestSeparator
+Running org.intrace.client.test.level2.connection.lowLevel.TestBasicConnection_RequiresExternalAgent
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.13 sec - in org.intrace.client.test.level2.connection.lowLevel.TestBasicConnection_RequiresExternalAgent
+Running org.intrace.client.test.level2.connection.lowLevel.TestMultipleConnections_requiresTwoExternalAgents
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.027 sec - in org.intrace.client.test.level2.connection.lowLevel.TestMultipleConnections_requiresTwoExternalAgents
+Running org.intrace.client.test.level2.connection.lowLevel.TestOtherBasicConnection_RequiresExternalAgent
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.009 sec - in org.intrace.client.test.level2.connection.lowLevel.TestOtherBasicConnection_RequiresExternalAgent
+Running org.intrace.client.test.level2.connection.TestCollectionOfSpecificEvents
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.002 sec - in org.intrace.client.test.level2.connection.TestCollectionOfSpecificEvents
+Running org.intrace.client.test.level2.connection.TestConnection
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 sec - in org.intrace.client.test.level2.connection.TestConnection
+Running org.intrace.client.test.level2.connection.TestEventCollection
+Found [964] events.
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.003 sec - in org.intrace.client.test.level2.connection.TestEventCollection
+Running org.intrace.client.test.level2.connection.TestEventFilterExt
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.004 sec - in org.intrace.client.test.level2.connection.TestEventFilterExt
+Running org.intrace.client.test.level3.request.TestRequestEventCollection
+     [java] Event [date=11/3/13 12:36 PM, description=description, id=0, location=Location [address=1 high street, id=0, name=location], name=event name]
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.36 sec - in org.intrace.client.test.level3.request.TestRequestEventCollection
+
+Results :
+
+Tests run: 32, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 15.507s
+[INFO] Finished at: Sun Nov 03 12:36:13 CST 2013
+[INFO] Final Memory: 12M/37M
+[INFO] ------------------------------------------------------------------------
+[INFO] Executed tasks
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 2:58.253s
+[INFO] Finished at: Sun Nov 03 12:38:53 CST 2013
+[INFO] Final Memory: 6M/17M
+[INFO] ------------------------------------------------------------------------
