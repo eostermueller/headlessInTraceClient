@@ -3,10 +3,6 @@ package org.intrace.shared;
 import java.util.HashSet;
 import java.util.Set;
 
-/**  No changes were made to this class, when creating the headless intrace connection API
-  *
-  *
-  */
 public class AgentConfigConstants
 {
   public static final String STID = "STID";
@@ -20,6 +16,7 @@ public class AgentConfigConstants
   
   public static final String SERVER_PORT = "SERVER_PORT";
 
+  public static final String GZIP = "[gzip-";	//Default is not enabled (false).
   public static final String CLASS_REGEX = "[regex-";
   public static final String EXCLUDE_CLASS_REGEX = "[exclude-regex-";
   public static final String INSTRU_ENABLED = "[instru-";
@@ -27,7 +24,7 @@ public class AgentConfigConstants
   public static final String VERBOSE_MODE = "[verbose-";
   public static final String OPT_SERVER_PORT = "[serverport-";
   public static final String CALLBACK_PORT = "[callbackport-";
-  public static final String INTERFACE_CHECK_ENABLED = "[interface-";
+  public static final String EXIT_STACK_TRACE = "[exit-stack-trace-";
   
   public static final String START_WAIT = "[startwait";
   public static final String START_ACTIVATE = "[startactivate";
@@ -42,6 +39,7 @@ public class AgentConfigConstants
     COMMANDS.add(VERBOSE_MODE + "<true/false>");
     COMMANDS.add(OPT_SERVER_PORT + "<int>");
     COMMANDS.add(CALLBACK_PORT + "<int>");
-    COMMANDS.add(INTERFACE_CHECK_ENABLED+ "<true/false>");
+    COMMANDS.add(GZIP + "<true/false>");
+    COMMANDS.add(EXIT_STACK_TRACE + "<true/false>");
   }
 }

@@ -2,6 +2,8 @@ package org.intrace.client.model;
 
 import java.util.regex.Pattern;
 
+import org.intrace.client.IntraceException;
+
 
 public interface ITraceEventParser {
 	public static final String SQUARE_BRACKET_DELIMITERS = "[\\[\\]]";
@@ -13,6 +15,10 @@ public interface ITraceEventParser {
 	public static final String METHOD_PARAMETER_MARKER_NAMED = "Arg (";
 	public static final String METHOD_RETURN_VALUE_MARKER = "Return";
 
-	public ITraceEvent createEvent(String rawEventText, int sourceLineNumber);
+	public ITraceEvent createEvent(String rawEventText, int sourceLineNumber) throws IntraceException;
+
+	public abstract StackTraceElement createStackTraceElement(String singleStackTraceElement);
+
+	StackTraceElement[] parseStackTrace(String stackTrace);
 
 }

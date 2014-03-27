@@ -2,19 +2,18 @@ package org.intrace.client;
 
 import org.intrace.client.connection.DefaultCallback;
 
+
 import org.intrace.client.connection.DefaultConnection;
-import org.intrace.client.connection.DefaultConnectionList;
 import org.intrace.client.connection.DefaultTraceEventWriterImpl;
 import org.intrace.client.connection.IConnection;
-import org.intrace.client.connection.IConnectionList;
 import org.intrace.client.connection.IConnectionStateCallback;
 import org.intrace.client.model.DefaultTraceEventParser;
 import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.model.ITraceEventParser;
 import org.intrace.client.model.DefaultTraceEvent;
-import org.intrace.client.request.DefaultRequestEvents;
+import org.intrace.client.request.DefaultRequest;
 import org.intrace.client.request.DefaultRequestSeparator;
-import org.intrace.client.request.IRequestEvents;
+import org.intrace.client.request.IRequest;
 import org.intrace.client.request.IRequestSeparator;
 
 /**
@@ -116,8 +115,8 @@ public class DefaultFactory implements IFactory {
 	}
 
 	@Override
-	public IRequestEvents getRequestEvents() {
-		return new DefaultRequestEvents();
+	public IRequest getRequest() {
+		return new DefaultRequest();
 	}
 	@Override
 	public IConnectionStateCallback getCallback() {

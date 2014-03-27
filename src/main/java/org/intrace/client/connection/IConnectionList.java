@@ -1,7 +1,10 @@
 package org.intrace.client.connection;
 
+import java.util.List;
+
 import org.intrace.client.connection.command.IAgentCommand;
 import org.intrace.client.filter.ITraceFilterExt;
+import org.intrace.client.request.BadCompletedRequestListener;
 
 public interface IConnectionList {
 
@@ -23,13 +26,16 @@ public interface IConnectionList {
 
 	IConnection connect(IConnectionStateCallback connectionCallback,
 			HostPort hostPort, IAgentCommand[] startupCommands)
-			throws ConnectionException, ConnectionTimeout;
+			throws ConnectionException, ConnectionTimeout, BadCompletedRequestListener;
 
 	int size();
+	List<IConnection> getConnections();
 
 	IConnection connect(IConnectionStateCallback connectionCallback,
 			HostPort hostPort, IAgentCommand[] startupCommands,
 			ITraceFilterExt filter) throws ConnectionException,
-			ConnectionTimeout;
+			ConnectionTimeout, BadCompletedRequestListener;
+
+	void add(HostPort hostPort, IConnection c);
 
 }

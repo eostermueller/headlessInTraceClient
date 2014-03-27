@@ -9,13 +9,14 @@ import java.net.Socket;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.log4j.Logger;
 import org.intrace.client.DefaultFactory;
 import org.intrace.client.ITraceWriter;
 import org.intrace.client.filter.ITraceFilter;
 import org.intrace.client.filter.ITraceFilterExt;
 import org.intrace.client.filter.IncludeThisEventFilterExt;
 import org.intrace.client.model.ITraceEvent;
+import org.intrace.shared.Base64;
+import org.slf4j.LoggerFactory;
 
 import ca.odell.glazedlists.EventList;
 
@@ -33,10 +34,13 @@ import ca.odell.glazedlists.EventList;
  */
 public class NetworkDataReceiverThread2 implements Runnable
 {
-    private static final Logger LOG = Logger.getLogger( NetworkDataReceiverThread2.class.getName() );
+	private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(NetworkDataReceiverThread2.class);
+    //private static final Logger LOG = Logger.getLogger( NetworkDataReceiverThread2.class.getName() );
   public static interface INetworkOutputConfig
   {
     public boolean isNetOutputEnabled();
+
+	public boolean isGzipEnabled();
   }
   private List<ITraceWriter> m_traceWriters = new CopyOnWriteArrayList<ITraceWriter>();
   public List<ITraceWriter> getTraceWriters() {
@@ -133,7 +137,10 @@ public void start()
         	   */
             //if (outputConfig.isNetOutputEnabled())
             {
-
+                if (outputConfig.isGzipEnabled()) {
+              	  byte[] tmp = Base64.decode(traceLine);
+              	  traceLine = new String(tmp);
+                }
             	writeTraceEvent(traceLine);
             }
           }

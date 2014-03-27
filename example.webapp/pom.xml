@@ -158,7 +158,13 @@
 									<!-- run these using "mvn antrun:run:  compile, runtime, test plugin-->
 									<java fork="true" classname="example.webapp.run.WebAppLauncher" classpathref="maven.test.classpath"> 
 									<arg value="10" />
-										<jvmarg value="-javaagent:../agent-lib/intrace-agent.jar"/>
+
+/Users/erikostermueller/Documents/src/jsource/inTrace_compressed/etogit/org.intrace/org.intrace/build/jars/intrace-agent.jar
+<!--
+									<jvmarg value="-javaagent:../agent-lib/intrace-agent.jar=[serverport-9125[gzip-true"/>
+--> 
+									<jvmarg value="-javaagent:/Users/erikostermueller/Documents/src/jsource/inTrace_compressed/etogit/org.intrace/org.intrace/build/jars/intrace-agent.jar=[serverport-9125[gzip-true[exit-stack-trace-true"/>
+
 									</java>
 		                                                </target>
 		                                        </configuration>

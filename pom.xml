@@ -41,7 +41,8 @@
 							<!-- run these using "mvn antrun:run -->
 							<java fork="true" classname="${intrace.test.class}" classpathref="maven.test.classpath"> 
 								<arg value="10" />
-								<jvmarg value="-javaagent:agent-lib/intrace-agent.jar"/>
+<!--    <jvmarg value="-javaagent:agent-lib/intrace-agent.jar"/> -->
+                                                                <jvmarg value="-javaagent:/Users/erikostermueller/Documents/src/jsource/inTrace_compressed/etogit/org.intrace/org.intrace/build/jars/intrace-agent.jar=[regex-example[gzip-true"/>
 							</java>
                                                 </target>
                                         </configuration>
@@ -84,7 +85,14 @@
   		<artifactId>glazedlists_java15</artifactId>
   		<version>1.9.0</version>
   	</dependency>
-    <!-- LOGGING DEPENDENCIES - LOG4J -->
+  		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+  	
+  	  
+    <!-- LOGGING DEPENDENCIES - LOG4J 
     <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-log4j12</artifactId>
@@ -95,5 +103,6 @@
         <artifactId>log4j</artifactId>
         <version>1.2.16</version>
     </dependency>
+    -->
   </dependencies>
 </project>

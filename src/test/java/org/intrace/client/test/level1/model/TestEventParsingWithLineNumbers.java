@@ -2,6 +2,7 @@ package org.intrace.client.test.level1.model;
 
 import static org.junit.Assert.*;
 
+import org.intrace.client.IntraceException;
 import org.intrace.client.model.DefaultTraceEventParser;
 import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.model.ITraceEventParser;
@@ -19,6 +20,7 @@ import org.junit.Test;
  *
  */
 public class TestEventParsingWithLineNumbers {
+	private static final long EXPECTED_TIMESTAMP_2 = 65273681;/*"18:07:53.681"*/
 	ITraceEventParser m_eventParser = new DefaultTraceEventParser();
 
 
@@ -35,13 +37,13 @@ public class TestEventParsingWithLineNumbers {
 		
 	}
 	@Test
-	public void canParseTraceEventWithLineNumber_ENTRY() {
-		String rawEventText = "[13:47:21.068]:[1]:example.FirstTraceExample:intArrayMethod: }:70";
+	public void canParseTraceEventWithLineNumber_ENTRY() throws IntraceException {
+		String rawEventText = "[18:07:53.681]:[1]:example.FirstTraceExample:intArrayMethod: }:70";
 		ITraceEvent expectedEvent = new DefaultTraceEvent(
 				rawEventText,						//raw event text
 				"example",					//package
 				"FirstTraceExample",					//class
-				"13:47:21.068",									//time in millis
+				EXPECTED_TIMESTAMP_2,									//time in millis
 				"intArrayMethod",					//method
 				EventType.EXIT,					//trace event type
 				null,								//arg or return value

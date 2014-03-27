@@ -43,4 +43,8 @@ public class AmericanEnglishMessages implements HumanReadableMessages {
 	public String getTestSetupInstructions() {
 		return "Here is how you run the unit tests.....";
 	}
+	@Override
+	public String getInTraceAgentDisconnected() {
+		return "The process runing the InTrace agent died.";
+	}
 }

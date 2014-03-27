@@ -12,4 +12,5 @@ public interface HumanReadableMessages {
 	public abstract String getConnectionSuccessful(HostPort hostPort);
 	public abstract String getFailedConnection(HostPort hostPort, Exception e);
 	public abstract String getTestSetupInstructions();
+	public abstract String getInTraceAgentDisconnected();
 }

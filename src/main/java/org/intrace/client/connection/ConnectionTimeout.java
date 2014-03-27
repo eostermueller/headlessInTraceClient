@@ -6,7 +6,8 @@ import org.intrace.client.IntraceException;
 public class ConnectionTimeout extends IntraceException {
 	HostPort hostPort = null;
 	long timeoutMs = -1;
-	ConnectionTimeout(HostPort hostPortVal, long timeoutMsVal) {
+	
+	public ConnectionTimeout(HostPort hostPortVal, long timeoutMsVal) {
 		hostPort = hostPortVal;
 		timeoutMs = timeoutMsVal;
 	}

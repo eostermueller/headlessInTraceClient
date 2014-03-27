@@ -20,25 +20,30 @@ public class HelloWorld extends HttpServlet {
     	//ServletContext sc = (ServletContext) WebApplicationContextUtils.getWebApplicationContext();
     	WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
         EventDao eventDao = (EventDao) ctx.getBean("eventDao");
+        Event event = null;
+        StringBuilder sbStackTrace = null;
+        for (int i = 0; i < 5 ; i++ ) {
+            Location location = new Location();
+            location.setAddress("1 high street");
+            location.setName("location-"+i);
 
-        Location location = new Location();
-        location.setAddress("1 high street");
-        location.setName("location");
+            event = new Event();
+            event.setName("event name-"+i);
+            event.setDescription("description");
+            event.setLocation(location);
+            event.setDate(new Timestamp(System.currentTimeMillis()));
 
-        Event event = new Event();
-        event.setName("event name");
-        event.setDescription("description");
-        event.setLocation(location);
-        event.setDate(new Timestamp(System.currentTimeMillis()));
+            event = eventDao.save(event);
 
-        event = eventDao.save(event);
+            System.out.println(event);
+    		sbStackTrace = new StringBuilder();
+    		for(StackTraceElement ele : Thread.currentThread().getStackTrace()) {
+    			sbStackTrace.append( ele.toString());
+    			sbStackTrace.append("\n");
+    		}
+        	
+        }
 
-        System.out.println(event);
-		StringBuilder sbStackTrace = new StringBuilder();
-		for(StackTraceElement ele : Thread.currentThread().getStackTrace()) {
-			sbStackTrace.append( ele.toString());
-			sbStackTrace.append("\n");
-		}
         
     	
         response.setContentType("text/html");

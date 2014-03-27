@@ -1,11 +1,13 @@
 package org.intrace.client.filter;
 
 import java.util.List;
-import org.apache.log4j.Logger;
+
 import org.intrace.client.model.ITraceEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IncludeAnyOfTheseEventsFilterExt implements ITraceFilterExt {
-    private static final Logger LOG = Logger.getLogger( IncludeThisEventFilterExt.class.getName() );
+    private static final Logger LOG = LoggerFactory.getLogger( IncludeThisEventFilterExt.class.getName() );
 	private static final Object CLASS_DELIMITER = "|";
 	List<ITraceEvent> m_criteriaList = null;
 	public void setFilterCriteria(List<ITraceEvent> criteria) {
@@ -42,6 +44,9 @@ public class IncludeAnyOfTheseEventsFilterExt implements ITraceFilterExt {
 					&& criteria.getClassName().equals(traceData.getClassName())
 					&& criteria.getMethodName().equals(traceData.getMethodName())
 					) {
+				
+						
+				
 						if (LOG.isDebugEnabled())  LOG.debug("Found match for [" + traceData.getRawEventData() + "] to [" + m_criteriaList.size() + "] criteria ");
 						return true;
 					} 

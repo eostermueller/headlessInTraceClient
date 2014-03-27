@@ -78,15 +78,11 @@ public interface ITraceEvent {
 
 	public long getAgentTimeMillis();
 
-	public String getAgentTimeMillisString();
-
-	public void setAgentTimeMillisString(String val);
-
 	public void setAgentTimeMillis(long agentTimeMillis);
 
-	public long getClientTimeMillis();
+	public long getClientDateTimeMillis();
 	
-	public void setClientTimeMillis(long receiptTimeMillis);
+	public void setClientDateTimeMillis(long receiptTimeMillis);
 
 	public String getRawEventData();
 
@@ -116,6 +112,13 @@ public interface ITraceEvent {
 
 	public void setEventType(EventType eventType);
 	
+	/**
+	 * Say for a particular class, you have two 'get' methods.
+	 * One takes an int parameter, the other takes a string.
+	 * InTrace server agent events don't include the parameters. So these two methods will be indistinguishable, with the exception
+	 * of this attribute, the source code line number.
+	 * @return
+	 */
 	public int getSourceLineNumber();
 	
 	public void setSourceLineNumber(int val);
@@ -127,4 +130,8 @@ public interface ITraceEvent {
 	public abstract String getArgName();
 
 	public abstract void setArgName(String argName);
+
+	public void setStackTrace(StackTraceElement[] stackTrace);
+
+	public StackTraceElement[] getStackTrace();
 }

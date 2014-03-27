@@ -1,10 +1,11 @@
 package org.intrace.client.connection;
 
-import org.apache.log4j.Logger;
+
 import org.intrace.client.DefaultFactory;
 
 
 import org.intrace.client.ITraceWriter;
+import org.intrace.client.IntraceException;
 import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.model.ITraceEventParser;
 
@@ -13,9 +14,11 @@ import ca.odell.glazedlists.EventList;
 import org.intrace.client.filter.ITraceFilterExt;
 import org.intrace.client.filter.ITraceFilter;
 import org.intrace.client.filter.IncludeThisEventFilterExt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultTraceEventWriterImpl implements ITraceWriter {
-    private static final Logger LOG = Logger.getLogger( DefaultTraceEventWriterImpl.class.getName() );
+	private static final Logger LOG = LoggerFactory.getLogger(DefaultTraceEventWriterImpl.class);
 	ITraceEventParser m_eventParser = null;
 	public DefaultTraceEventWriterImpl() {
 		m_eventParser = DefaultFactory.getFactory().getEventParser();
@@ -61,8 +64,7 @@ public class DefaultTraceEventWriterImpl implements ITraceWriter {
 				  if (getTraceFilterExt().matches(te)) {
 					  getTraceEvents().add(te);
 				  }
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
+			} catch (IntraceException e) {
 				e.printStackTrace();
 			} finally {
 				getTraceEvents().getReadWriteLock().writeLock().unlock();

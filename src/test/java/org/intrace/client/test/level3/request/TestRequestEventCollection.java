@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -15,24 +14,19 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.intrace.client.DefaultFactory;
+import org.intrace.client.IntraceException;
 import org.intrace.client.connection.ConnectState;
 import org.intrace.client.connection.ConnectionException;
-import org.intrace.client.connection.DefaultConnection;
 import org.intrace.client.connection.ConnectionTimeout;
 import org.intrace.client.connection.HostPort;
-import org.intrace.client.connection.IConnectionStateCallback;
 import org.intrace.client.connection.command.ClassInstrumentationCommand;
 import org.intrace.client.connection.command.IAgentCommand;
-import org.intrace.client.filter.ITraceFilterExt;
 import org.intrace.client.filter.IncludeAnyOfTheseEventsFilterExt;
-import org.intrace.client.filter.IncludeThisEventFilterExt;
 import org.intrace.client.model.ITraceEvent;
-import org.intrace.client.model.ITraceEvent.EventType;
 import org.intrace.client.model.ITraceEventParser;
 import org.intrace.client.request.DefaultRequestSeparator;
-import org.intrace.client.request.ICompletedRequestCallback;
 import org.intrace.client.request.BadCompletedRequestListener;
-import org.intrace.client.request.IRequestEvents;
+import org.intrace.client.request.IRequest;
 import org.intrace.client.request.RequestConnection;
 import org.intrace.client.request.RequestWriter;
 import org.intrace.client.test.TestConfig;
@@ -55,7 +49,7 @@ public class TestRequestEventCollection {
 	/**
 	 * Would like to use a closure instead of this, but closures don't exist yet.
 	 */
-	List<IRequestEvents> m_completedRequests = new CopyOnWriteArrayList<IRequestEvents>();
+	List<IRequest> m_completedRequests = new CopyOnWriteArrayList<IRequest>();
 	
 	@Before
 	public void setup() {
@@ -75,10 +69,10 @@ public class TestRequestEventCollection {
 	 * @throws IOException
 	 * @throws InterruptedException 
 	 * @throws ConnectionException 
-	 * @throws ConnectionTimeout 
+	 * @throws IntraceException 
 	 */
 	@Test
-	public void canCollectMultipleEventsForSingleServletRequest() throws BadCompletedRequestListener, IOException, InterruptedException, ConnectionTimeout, ConnectionException {
+	public void canCollectMultipleEventsForSingleServletRequest() throws BadCompletedRequestListener, IOException, InterruptedException, ConnectionException, IntraceException {
 		ClassInstrumentationCommand cic = new ClassInstrumentationCommand();
 		//An example of how to provide more configuration options
 		//For the InTrace server agent:
@@ -139,7 +133,7 @@ public class TestRequestEventCollection {
 		 * Pause to collect some trace events from the Agent running on 9125.
 		 */
 		Thread.sleep(2000);
-		assertEquals("Didn't capture the right number of events. ", 3 ,drs.eventCounter.get() );
+		assertEquals("Didn't capture the right number of events. ", 11 ,drs.eventCounter.get() );
 		
 		requestConnection.disconnect();
 		myMessages = testCallback.getConnectStates();
@@ -150,9 +144,9 @@ public class TestRequestEventCollection {
 		 *  V A L I D A T E    T R A C E
 		 */
 		RequestWriter requestWriter = (RequestWriter) requestConnection.getTraceWriter();
-		ConcurrentHashMap<String, IRequestEvents> mapInFlight = requestWriter.getRequestSeparator().getInFlightRequests();
+		ConcurrentHashMap<String, IRequest> mapInFlight = requestWriter.getRequestSeparator().getInFlightRequests();
 		if (mapInFlight.size() > 0) {
-			IRequestEvents ire = mapInFlight.get(0);
+			IRequest ire = mapInFlight.get(0);
 			if (ire==null) {
 				System.out.println("##################### Found a null, unprocessed event");
 			} else {
@@ -162,14 +156,14 @@ public class TestRequestEventCollection {
 		assertEquals("Just submitted several web requests, but found some were unprocessed.",0,mapInFlight.size());
 		
 		
-		Queue<IRequestEvents> requests = requestWriter.getCompletedRequestQueue();
+		Queue<IRequest> requests = requestWriter.getCompletedRequestQueue();
 		assertEquals("Was expecting one completed request from a web server, but dind't", 1, requests.size() );
 		//System.out.println("Found these requests [" + requests.toString() + "]");
-		IRequestEvents myRequestEvents = requests.peek();
-		assertEquals("Was expecting two SQL statements in this request", 2, myRequestEvents.getRequestEvents().size());
-		ITraceEvent event0 = myRequestEvents.getRequestEvents().get(0);
+		IRequest myRequestEvents = requests.peek();
+		assertEquals("Was expecting two SQL statements in this request", 10, myRequestEvents.getEvents().size());
+		ITraceEvent event0 = myRequestEvents.getEvents().get(0);
 		assertEquals("Couldn't not find the SQL statement in the first event from the web server", "INSERT INTO Location (name, address) VALUES(?, ?)", event0.getValue());
-		ITraceEvent event1 = myRequestEvents.getRequestEvents().get(1);
+		ITraceEvent event1 = myRequestEvents.getEvents().get(1);
 		assertEquals("Couldn't not find the SQL statement in the first event from the web server", "INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)", event1.getValue());
 		
 	}

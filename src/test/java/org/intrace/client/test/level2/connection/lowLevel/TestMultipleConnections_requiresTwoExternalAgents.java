@@ -12,6 +12,7 @@ import org.intrace.client.connection.HostPort;
 import org.intrace.client.connection.IConnection;
 import org.intrace.client.connection.IConnectionList;
 import org.intrace.client.connection.IConnectionStateCallback;
+import org.intrace.client.request.BadCompletedRequestListener;
 //import org.intrace.client.connection.test.BasicConnectionTest_RequiresExternalAgent.DefaultCallback;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,9 +28,10 @@ public class TestMultipleConnections_requiresTwoExternalAgents {
 	 *	and perhaps a different part of the same program collects events of type Y.
 	 * @throws ConnectionTimeout
 	 * @throws ConnectionException
+	 * @throws BadCompletedRequestListener 
 	 */
 	@Test
-	public void testStatusMessagesFromTwoConnectionsToSamePort() throws ConnectionTimeout, ConnectionException {
+	public void testStatusMessagesFromTwoConnectionsToSamePort() throws ConnectionTimeout, ConnectionException, BadCompletedRequestListener {
 		IConnectionList connList = DefaultConnectionList.getSingleton();
 
 		//These two objects connect to the same machine:port (localhost:9123)

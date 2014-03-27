@@ -7,16 +7,20 @@ import org.intrace.client.model.ITraceEvent.EventType;
  * @author erikostermueller
  *
  */
-public class DefaultTraceEvent implements ITraceEvent {
+public class DefaultTraceEvent implements ITraceEvent, java.io.Serializable {
 
 	private static final String DELIMIT = ":";
+	private static final long LONG_UNINIT = -1L;
 
-	public DefaultTraceEvent() {}
+	public DefaultTraceEvent() {
+		super();
+		this.setClientDateTimeMillis(System.currentTimeMillis());
+	}
 	public DefaultTraceEvent(
 			String rawEventData,
 			String packageName,
 			String className,
-			String agentTimeMillisString,
+			long agentTimeMillis,
 			String methodName,
 			EventType eventType,
 			String value,
@@ -24,10 +28,11 @@ public class DefaultTraceEvent implements ITraceEvent {
 			String threadId,
 			int sourceLineNumber,
 			String argName) {
+		this();
 		setRawEventData(rawEventData);
 		setPackageName(packageName);
 		setClassName(className);
-		setAgentTimeMillisString(agentTimeMillisString);
+		setAgentTimeMillis(agentTimeMillis);
 		setMethodName(methodName);
 		setEventType(eventType);
 		setValue(value);
@@ -35,6 +40,16 @@ public class DefaultTraceEvent implements ITraceEvent {
 		setThreadId(threadId);
 		setSourceLineNumber(sourceLineNumber);
 		setArgName(argName);
+	}
+	private long m_agentTimeMillis = LONG_UNINIT;
+	private StackTraceElement[] m_stackTrace;
+	@Override
+	public StackTraceElement[] getStackTrace() {
+		return m_stackTrace;
+	}
+	@Override
+	public void setStackTrace(StackTraceElement[] stackTrace) {
+		this.m_stackTrace = stackTrace;
 	}
 	private String m_argName = null;
 	@Override
@@ -71,16 +86,16 @@ public class DefaultTraceEvent implements ITraceEvent {
 	private String m_agentName = null;
 	private short m_agentPort = -1;
 	private String m_threadId = null;
-	private String m_agentTimeMillisString = null;
 	private String m_packageName = null;
 	private String m_className = null;
 	private String m_methodName = null;
 	private EventType m_eventType = null;
-	private long m_clientTimeMillis = -1;
+	private long m_clientDateTimeMillis = -1;
 	private String m_rawEventData = null;
 	private boolean m_isConstructor;
 	private String m_value;
 	private int m_sourceLineNumber = -1;
+	//private StackTraceElement[] m_stackTrace = null;
 	
 	@Override
 	public String getAgentName() {
@@ -115,30 +130,22 @@ public class DefaultTraceEvent implements ITraceEvent {
 
 	@Override
 	public long getAgentTimeMillis() {
-		// TODO Auto-generated method stub
-		return 0;
+		return m_agentTimeMillis;
 	}
 
 	@Override
-	public String getAgentTimeMillisString() {
-		return m_agentTimeMillisString;
-	}
-	@Override
-	public void setAgentTimeMillis(long agentTimeMillis) {
-		// TODO Auto-generated method stub
-
-	}
+	public void setAgentTimeMillis(long val) {
+		m_agentTimeMillis = val;
+ 	}
 
 	@Override
-	public long getClientTimeMillis() {
-		// TODO Auto-generated method stub
-		return 0;
+	public long getClientDateTimeMillis() {
+		return m_clientDateTimeMillis;
 	}
 
 	@Override
-	public void setClientTimeMillis(long receiptTimeMillis) {
-		// TODO Auto-generated method stub
-
+	public void setClientDateTimeMillis(long receiptTimeMillis) {
+		m_clientDateTimeMillis = receiptTimeMillis;
 	}
 
 	@Override
@@ -190,7 +197,7 @@ public class DefaultTraceEvent implements ITraceEvent {
 	public void setMethodName(String method) {
 		m_methodName = method;
 		if (m_methodName!=null) {
-			if (DefaultTraceEventParser.CONSTRUCTOR_METHOD_MARKER.equals(m_methodName)) {
+			if (ITraceEventParser.CONSTRUCTOR_METHOD_MARKER.equals(m_methodName)) {
 				setConstructor(true);
 			}
 		}
@@ -204,10 +211,6 @@ public class DefaultTraceEvent implements ITraceEvent {
 	@Override
 	public String getValue() {
 		return m_value;
-	}
-	@Override
-	public void setAgentTimeMillisString(String val) {
-		m_agentTimeMillisString = val;
 	}
 	@Override
 	public void setConstructor(boolean val) {

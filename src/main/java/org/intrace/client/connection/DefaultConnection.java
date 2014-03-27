@@ -2,6 +2,7 @@ package org.intrace.client.connection;
 
 
 import java.net.InetSocketAddress;
+
 import java.net.Socket;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -12,13 +13,13 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.log4j.Logger;
 import org.intrace.client.DefaultFactory;
 import org.intrace.client.HumanReadableMessages;
 import org.intrace.client.ITraceWriter;
 import org.intrace.client.connection.command.IAgentCommand;
 import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.request.BadCompletedRequestListener;
+import org.slf4j.LoggerFactory;
 
 import ca.odell.glazedlists.BasicEventList;
 import ca.odell.glazedlists.EventList;
@@ -32,7 +33,8 @@ import ca.odell.glazedlists.EventList;
  *
  */
 public class DefaultConnection implements IConnection {
-	private static final Logger LOG = Logger.getLogger( DefaultConnection.class.getName() );
+//	private static final Logger LOG = Logger.getLogger( DefaultConnection.class.getName() );
+	private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(DefaultConnection.class);	
 	ConnectionDetail getConnectionDetail() {
 		return m_connDetail;
 	}
@@ -144,7 +146,7 @@ public class DefaultConnection implements IConnection {
 	        return ynRC;
 	    }
 	}	
-	public void connect_ORIG(String host, int port, IAgentCommand[] startupCommandAry ) throws ConnectionTimeout, ConnectionException {
+	public void connect_ORIG(String host, int port, IAgentCommand[] startupCommandAry ) throws ConnectionTimeout, ConnectionException, BadCompletedRequestListener {
 		setHostPort( new HostPort(host,port));
 		
 		addCallback(new DefaultCallback());

@@ -2,9 +2,9 @@ package org.intrace.client.request;
 
 import java.util.Queue;
 
-import org.apache.log4j.Logger;
 import org.intrace.client.DefaultFactory;
 import org.intrace.client.ITraceWriter;
+import org.intrace.client.IntraceException;
 import org.intrace.client.connection.HostPort;
 import org.intrace.client.connection.NetworkDataReceiverThread2;
 import org.intrace.client.filter.ITraceFilter;
@@ -13,17 +13,22 @@ import org.intrace.client.model.FixedLengthQueue;
 import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.model.ITraceEventParser;
 import org.junit.Before;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ca.odell.glazedlists.EventList;
 
 public class RequestWriter implements ITraceWriter, ICompletedRequestCallback {
-    private static final Logger LOG = Logger.getLogger( RequestWriter.class.getName() );
-	Queue<IRequestEvents> m_requestQueue = null;
+    private static final Logger LOG = LoggerFactory.getLogger( RequestWriter.class );
+	Queue<IRequest> m_requestQueue = null;
 	private ITraceEvent m_requestCompletionEvent = null;
 
 	
-	public Queue<IRequestEvents> getCompletedRequestQueue() {
+	public Queue<IRequest> getCompletedRequestQueue() {
 		return m_requestQueue;
+	}
+	public void setCompletedRequestQueue(Queue<IRequest> val) {
+		m_requestQueue = val;
 	}
 	/**
 	 * This class is a highly-configurable beast.
@@ -34,7 +39,7 @@ public class RequestWriter implements ITraceWriter, ICompletedRequestCallback {
 		
 		this.setRequestSeparator(DefaultFactory.getFactory().getRequestSeparator());
 		//The requests, with their events, are stored in memory here.   no support for persistence yet.
-		m_requestQueue = new FixedLengthQueue<IRequestEvents>(numberOfRequestsToRetain);
+		m_requestQueue = new FixedLengthQueue<IRequest>(numberOfRequestsToRetain);
 		
 		//Indicates where the completed requests should be sent to.
 		getRequestSeparator().setCompletedRequestCallback(this);
@@ -84,6 +89,8 @@ public class RequestWriter implements ITraceWriter, ICompletedRequestCallback {
 					  getRequestSeparator().add(te);
 				  }
 			} catch (Exception e) {
+				e.printStackTrace();
+			} catch (IntraceException e) {
 				e.printStackTrace();
 			}
 		}
@@ -138,7 +145,7 @@ public class RequestWriter implements ITraceWriter, ICompletedRequestCallback {
 	}
 
 	@Override
-	public void requestCompleted(IRequestEvents events) {
+	public void requestCompleted(IRequest events) {
 		getCompletedRequestQueue().add(events);
 	}
 

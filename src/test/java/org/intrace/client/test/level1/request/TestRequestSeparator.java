@@ -6,10 +6,11 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.intrace.client.DefaultFactory;
+import org.intrace.client.IntraceException;
 import org.intrace.client.filter.IncludeThisEventFilterExt;
 import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.request.ICompletedRequestCallback;
-import org.intrace.client.request.IRequestEvents;
+import org.intrace.client.request.IRequest;
 import org.intrace.client.request.IRequestSeparator;
 import org.intrace.client.test.TestUtil;
 import org.junit.Before;
@@ -19,20 +20,20 @@ public class TestRequestSeparator {
 	/**
 	 * Would like to use a closure instead of this, but closures don't exist yet.
 	 */
-	List<IRequestEvents> m_completedRequests = new CopyOnWriteArrayList<IRequestEvents>();
+	List<IRequest> m_completedRequests = new CopyOnWriteArrayList<IRequest>();
 	private static final String THREAD_COMPLETION_EVENT = "[08:36:43.885]:[412]:java.lang.Thread:run: }:682";
 
 	private ITraceEvent m_requestCompletionEvent = null;
 
 	@Before
-	public void setup() {
+	public void setup() throws IntraceException {
 		m_requestCompletionEvent = DefaultFactory.getFactory().getEventParser().createEvent(THREAD_COMPLETION_EVENT, 0);
 	}
 	
 
 	
 	@Test
-	public void canSeparteMultipleRequests_trivial() {
+	public void canSeparteMultipleRequests_trivial() throws IntraceException {
 		/**
 		 * These events represent the same two events getting fired repeatedly, but synchronously, where one thread doesn't start until the previous one ends.
 		 */
@@ -48,7 +49,7 @@ public class TestRequestSeparator {
 		ICompletedRequestCallback requestCallback = new ICompletedRequestCallback() {
 			
 			@Override
-			public void requestCompleted(IRequestEvents events) {
+			public void requestCompleted(IRequest events) {
 				m_completedRequests.add(events);
 				
 			}
@@ -61,14 +62,14 @@ public class TestRequestSeparator {
 		}
 		
 		assertEquals("Added three requests, each with zero events, but didn't get 3", 3 /* events.size() */, m_completedRequests.size());
-		for(IRequestEvents request : m_completedRequests) {
-			assertEquals("Expected zero events for each request", 0, request.getRequestEvents().size());
+		for(IRequest request : m_completedRequests) {
+			assertEquals("Expected zero events for each request", 0, request.getEvents().size());
 		}
 		assertEquals("Whoops.  The RequestSeparator should have evicted all the requests, but some were left",0,requestSeparator.size());
 		
 	}
 	@Test
-	public void canSeparateManyEventsIntoEightRequests() {
+	public void canSeparateManyEventsIntoEightRequests() throws IntraceException {
 		/**
 		 * These events represent the same two events getting fired repeatedly, but synchronously, where one thread doesn't start until the previous one ends.
 		 */
@@ -98,7 +99,7 @@ public class TestRequestSeparator {
 		ICompletedRequestCallback requestCallback = new ICompletedRequestCallback() {
 			
 			@Override
-			public void requestCompleted(IRequestEvents events) {
+			public void requestCompleted(IRequest events) {
 				m_completedRequests.add(events);
 			}
 		};
@@ -116,11 +117,11 @@ public class TestRequestSeparator {
 		myTestFilter.setFilterCriteria(testEvent);
 		
 		assertEquals("Added eight requests, each with one events, but didn't get eight", 8 /* events.size() */, m_completedRequests.size());
-		for(IRequestEvents request : m_completedRequests) {
-			assertEquals("Expected one event for each request", 1, request.getRequestEvents().size());
+		for(IRequest request : m_completedRequests) {
+			assertEquals("Expected one event for each request", 1, request.getEvents().size());
 			
 			assertTrue("Expected a particular event type, class name and package", 
-					myTestFilter.matches(request.getRequestEvents().get(0)));
+					myTestFilter.matches(request.getEvents().get(0)));
 		}
 		
 		assertEquals("Whoops.  The RequestSeparator should have evicted all the requests, but some were left",0,requestSeparator.size());
@@ -130,9 +131,10 @@ public class TestRequestSeparator {
 	 * Validate that incomplete requests are not forwarded to ICompletedRequestCallback.
 	 * Incomplete requests are ones for which the {@link IRequestSeparator#setRequestCompletionEvent(ITraceEvent)} has 
 	 * not yet been called.
+	 * @throws IntraceException 
 	 */
 	@Test
-	public void canHoldIncompleteRequests() {
+	public void canHoldIncompleteRequests() throws IntraceException {
 		/**
 		 * Request/thread 412, below, is complete.  See the Thread:run?
 		 * However, request/thread 413 is incomplete, because there is no line with 413 and Thread:run
@@ -151,7 +153,7 @@ public class TestRequestSeparator {
 		ICompletedRequestCallback requestCallback = new ICompletedRequestCallback() {
 			
 			@Override
-			public void requestCompleted(IRequestEvents events) {
+			public void requestCompleted(IRequest events) {
 				m_completedRequests.add(events);
 			}
 		};
@@ -169,16 +171,16 @@ public class TestRequestSeparator {
 		myTestFilter.setFilterCriteria(testEvent);
 		
 		assertEquals("Added a single complete request along with an event for an incomplete request.  Expecting just a single completed request", 1 , m_completedRequests.size());
-		IRequestEvents request = m_completedRequests.get(0);
-		assertEquals("Expected one event for the single completed request", 1, request.getRequestEvents().size());
+		IRequest request = m_completedRequests.get(0);
+		assertEquals("Expected one event for the single completed request", 1, request.getEvents().size());
 			
 		assertTrue("Expected a particular event type, class name and package", 
-			myTestFilter.matches(request.getRequestEvents().get(0)));
-		assertEquals("Expected one event from a particular thread, but did not find that thread", "412", request.getRequestEvents().get(0).getThreadId());
+			myTestFilter.matches(request.getEvents().get(0)));
+		assertEquals("Expected one event from a particular thread, but did not find that thread", "412", request.getEvents().get(0).getThreadId());
 		assertEquals("Whoops. The RequestSeparator should not evicted one request, because it hadn't completed yet",1,requestSeparator.size());
 	}
 	@Test
-	public void canSeparateInterleavedEventsIntoEightRequests() {
+	public void canSeparateInterleavedEventsIntoEightRequests() throws IntraceException {
 		/**
 		 * Processing/events never happen in a tidy fashion, like this, but logically this situation must be handled.
 		 * 8 threads trigger two events each.
@@ -211,7 +213,7 @@ public class TestRequestSeparator {
 		ICompletedRequestCallback requestCallback = new ICompletedRequestCallback() {
 			
 			@Override
-			public void requestCompleted(IRequestEvents events) {
+			public void requestCompleted(IRequest events) {
 				m_completedRequests.add(events);
 			}
 		};
@@ -229,11 +231,11 @@ public class TestRequestSeparator {
 		myTestFilter.setFilterCriteria(testEvent);
 		
 		assertEquals("Added eight requests, each with one events, but didn't get eight", 8 /* events.size() */, m_completedRequests.size());
-		for(IRequestEvents request : m_completedRequests) {
-			assertEquals("Expected one event for each request", 1, request.getRequestEvents().size());
+		for(IRequest request : m_completedRequests) {
+			assertEquals("Expected one event for each request", 1, request.getEvents().size());
 			
 			assertTrue("Expected a particular event type, class name and package", 
-					myTestFilter.matches(request.getRequestEvents().get(0)));
+					myTestFilter.matches(request.getEvents().get(0)));
 		}
 		
 		assertEquals("Whoops.  The RequestSeparator should have evicted all the requests, but some were left",0,requestSeparator.size());

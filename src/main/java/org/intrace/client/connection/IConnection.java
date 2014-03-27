@@ -18,7 +18,7 @@ public interface IConnection {
 	boolean connect(String host, int port, IAgentCommand[] startupCommandAry)
 			throws ConnectionTimeout, ConnectionException, BadCompletedRequestListener;
 	boolean connect(HostPort hostPort, IAgentCommand[] startupCommandAry)
-			throws ConnectionTimeout, ConnectionException;
+			throws ConnectionTimeout, ConnectionException, BadCompletedRequestListener;
 
 	void disconnect();
 

@@ -133,8 +133,9 @@ public class RequestConnection implements IConnection {
 	}
 	@Override
 	public boolean connect(HostPort hostPort, IAgentCommand[] startupCommandAry)
-			throws ConnectionTimeout, ConnectionException {
-		return getConnection().connect(hostPort, startupCommandAry);
+			throws ConnectionTimeout, ConnectionException, BadCompletedRequestListener {
+		//return getConnection().connect(hostPort, startupCommandAry);
+		return connect(hostPort.hostNameOrIpAddress, hostPort.port, startupCommandAry);
 	}
 	@Override
 	public void executeStartupCommands() {

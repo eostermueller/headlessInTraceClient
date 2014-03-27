@@ -5,7 +5,7 @@ import org.intrace.client.connection.IConnectionStateCallback;
 import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.model.ITraceEventParser;
 import org.intrace.client.model.DefaultTraceEvent;
-import org.intrace.client.request.IRequestEvents;
+import org.intrace.client.request.IRequest;
 import org.intrace.client.request.IRequestSeparator;
 
 public interface IFactory {
@@ -18,6 +18,6 @@ public interface IFactory {
 	IConnection getDormantConnection();
 	ITraceEvent getTraceEvent();
 	IRequestSeparator getRequestSeparator();
-	IRequestEvents getRequestEvents();
+	IRequest getRequest();
 	IConnectionStateCallback getCallback();
 }

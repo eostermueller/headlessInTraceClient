@@ -1,18 +1,16 @@
 package org.intrace.client.connection;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.log4j.Logger;
 import org.intrace.client.DefaultFactory;
 import org.intrace.client.connection.command.IAgentCommand;
 import org.intrace.client.filter.ITraceFilterExt;
-import org.intrace.client.filter.IncludeThisEventFilterExt;
-import org.intrace.rcp.ClientStrings;
+import org.intrace.client.request.BadCompletedRequestListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -21,8 +19,8 @@ import org.intrace.rcp.ClientStrings;
  *
  */
 public class DefaultConnectionList implements IConnectionList {
-	private static final Logger LOG = Logger.getLogger( IncludeThisEventFilterExt.class.getName() );
-	private static DefaultConnectionList m_connectionList = new DefaultConnectionList();
+	private static final Logger LOG = LoggerFactory.getLogger(DefaultConnectionList.class);
+	private static IConnectionList m_connectionList = new DefaultConnectionList();
 	/**
 	 * The synchronization seems to only be required for the first call to instantiate the singleton.
 	 * @return
@@ -99,12 +97,12 @@ public class DefaultConnectionList implements IConnectionList {
 		add(hostPort, c);
 	}
 	@Override
-	public IConnection connect(IConnectionStateCallback connectionCallback, HostPort hostPort, IAgentCommand[] startupCommands) throws ConnectionException, ConnectionTimeout {
+	public IConnection connect(IConnectionStateCallback connectionCallback, HostPort hostPort, IAgentCommand[] startupCommands) throws ConnectionException, ConnectionTimeout, BadCompletedRequestListener {
 		return this.connect(connectionCallback, hostPort, startupCommands, null);
 	}
 
 	@Override
-	public IConnection connect(IConnectionStateCallback connectionCallback, HostPort hostPort, IAgentCommand[] startupCommands, ITraceFilterExt filter) throws ConnectionException, ConnectionTimeout {
+	public IConnection connect(IConnectionStateCallback connectionCallback, HostPort hostPort, IAgentCommand[] startupCommands, ITraceFilterExt filter) throws ConnectionException, ConnectionTimeout, BadCompletedRequestListener {
 		IConnection c = locateConnection(hostPort);
 		if (c==null) {
 			c = DefaultFactory.getFactory().getDormantConnection();
@@ -168,7 +166,8 @@ public class DefaultConnectionList implements IConnectionList {
 	 * @param c
 	 * @param hostPort
 	 */
-	private void add(HostPort hostPort, IConnection c) {
+	@Override
+	public void add(HostPort hostPort, IConnection c) {
 
 		//m_connections.add(cem);
 		m_mapConnections.put(hostPort.key(), c);
@@ -191,6 +190,15 @@ public class DefaultConnectionList implements IConnectionList {
 			}
 			
 		}
+	}
+	@Override
+	public List<IConnection> getConnections() {
+		List<IConnection> l = new ArrayList<IConnection>();
+		for( Object o : m_mapConnections.values().toArray()) {
+			IConnection c = (IConnection)o;
+			l.add(c);
+		}
+		return l;
 	}
 	
 }

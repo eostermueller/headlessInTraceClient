@@ -1,47 +1,24 @@
 package org.intrace.client.connection;
 
 import java.io.IOException;
-
-
-
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-
-
-
-
-//import net.sourceforge.nattable.extension.glazedlists.GlazedListsDataProvider;
-//import net.sourceforge.nattable.data.ListDataProvider;
 import ca.odell.glazedlists.BasicEventList;
 import ca.odell.glazedlists.EventList;
-
-
-//import org.intrace.client.gui.helper.Connection.ConnectState;
-//import org.intrace.client.gui.helper.Connection.ISocketCallback;
-
-
-
-
-
-import org.apache.log4j.Logger;
 import org.intrace.client.DefaultFactory;
 import org.intrace.client.connection.NetworkDataReceiverThread2.INetworkOutputConfig;
 import org.intrace.client.connection.command.IAgentCommand;
-import org.intrace.client.filter.IncludeThisEventFilterExt;
 import org.intrace.client.gui.helper.ControlConnectionThread;
 import org.intrace.client.gui.helper.TraceFactory;
 import org.intrace.client.gui.helper.ParsedSettingsData;
 import org.intrace.client.gui.helper.ControlConnectionThread.IControlConnectionListener;
 import org.intrace.client.model.BeanTraceEventImpl;
-import org.intrace.client.model.ITraceEvent;
-import org.intrace.rcp.ClientStrings;
-import org.intrace.shared.AgentConfigConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class manages the control and trace threads for a single connection.
@@ -78,7 +55,11 @@ import org.intrace.shared.AgentConfigConstants;
  *
  */
 public class ConnectionDetail implements IControlConnectionListener, IConnectionStateCallback {
-	private static final Logger LOG = Logger.getLogger( ConnectionDetail.class.getName() );
+	//private static final Logger LOG = Logger.getLogger( ConnectionDetail.class.getName() );
+	private static final Logger LOG = LoggerFactory.getLogger(ConnectionDetail.class);
+	  // Settings
+
+	
 	private List<IConnectionStateCallback> m_connCallbacks = new CopyOnWriteArrayList<IConnectionStateCallback>();
 	  private ConnectState m_connectState = ConnectState.DISCONNECTED;
 	  /**
@@ -157,9 +138,11 @@ public class ConnectionDetail implements IControlConnectionListener, IConnection
 	 * @todo: Delegate activity to all listening windows.
 	 */
 	@Override
-	public void setConfig(Map<String, String> progress) {
+	public void setConfig(Map<String, String> settingsMap) {
+		m_settingsData = new ParsedSettingsData(settingsMap);		
+		LOG.debug("Client got updated config from server. gzip [" + m_settingsData.gzipEnabled + "] all settings[" + m_settingsData.toString() + "]");
 		for(IConnectionStateCallback cb : this.m_connCallbacks)
-			cb.setConfig(progress);
+			cb.setConfig(settingsMap);
 	}
 
 	
@@ -247,8 +230,6 @@ public class ConnectionDetail implements IControlConnectionListener, IConnection
 	    {
 	      m_remoteAddress = socket.getInetAddress();
 	      this.port = socket.getPort();
-	      
-	      
 	      m_controlThread = new DebugControlConnectionThread(socket, this);
 	      m_controlThread.start();
 	      executeStartupCommands();
@@ -265,11 +246,16 @@ public class ConnectionDetail implements IControlConnectionListener, IConnection
 	      {
 	        INetworkOutputConfig config = new INetworkOutputConfig()
 	        {
-	          @Override
-	          public boolean isNetOutputEnabled()
-	          {
-	            return m_settingsData.netOutEnabled;
-	          }
+		          @Override
+		          public boolean isNetOutputEnabled()
+		          {
+		            return m_settingsData.netOutEnabled;
+		          }
+
+				@Override
+				public boolean isGzipEnabled() {
+					return m_settingsData.gzipEnabled;
+				}
 	        };
 	        	        
 	        m_networkTraceThread2 = new NetworkDataReceiverThread2(
@@ -297,8 +283,6 @@ public class ConnectionDetail implements IControlConnectionListener, IConnection
 	    }
 	}
 	
-
-
 	/**
 	 * TODO:  Need to see if setConnectionState and this method do the same thing, so one can be eliminated.
 	 */
@@ -382,11 +366,10 @@ public class ConnectionDetail implements IControlConnectionListener, IConnection
 
 }
 class DebugControlConnectionThread extends ControlConnectionThread {
-	private static final Logger LOG = Logger.getLogger( DebugControlConnectionThread.class.getName() );
+	private static final Logger LOG = LoggerFactory.getLogger(DebugControlConnectionThread.class);
 	public DebugControlConnectionThread(Socket socket,
 			IControlConnectionListener listener) {
 		super(socket, listener);
-		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public void sendMessage(String xiString) {

@@ -17,6 +17,7 @@ import org.intrace.client.connection.NetworkDataReceiverThread2;
 import org.intrace.client.connection.command.ClassInstrumentationCommand;
 import org.intrace.client.connection.command.IAgentCommand;
 import org.intrace.client.model.ITraceEvent;
+import org.intrace.client.request.BadCompletedRequestListener;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -95,7 +96,7 @@ public class TestOtherBasicConnection_RequiresExternalAgent {
 	* Therefore, there are some duplicate asssertions.
 	*/
 	@Test	
-	public void testStatusMessagesFromRealConnection_withTraceEvents() throws ConnectionTimeout, ConnectionException {
+	public void testStatusMessagesFromRealConnection_withTraceEvents() throws ConnectionTimeout, ConnectionException, BadCompletedRequestListener {
 		/**
 		 * InTrace will notify this test object with connection status updates.
 		 */

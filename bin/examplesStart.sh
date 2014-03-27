@@ -1,6 +1,6 @@
 mvn -f $(dirname $0)/../pom.xml \
 	-Dintrace.test.class=example.FirstTraceExample \
-	antrun:run &
+	antrun:run 1> out.1 2>&1 &
 
 sleep 2
 

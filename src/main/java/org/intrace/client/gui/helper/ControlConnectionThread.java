@@ -9,14 +9,19 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.intrace.client.DefaultFactory;
+import org.intrace.client.request.RequestWriter;
 import org.intrace.shared.AgentConfigConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**   No changes were made to this class, when creating the headless intrace connection API
   *
   */
 public class ControlConnectionThread implements Runnable
 {
-  public static interface IControlConnectionListener
+    private static final Logger LOG = LoggerFactory.getLogger( ControlConnectionThread.class );
+    public static interface IControlConnectionListener
   {
     public void setProgress(Map<String,String> progress);
     public void setStatus(Map<String,String> progress);
@@ -100,7 +105,10 @@ public class ControlConnectionThread implements Runnable
     }
     catch (Exception ex)
     {
-      if (!ex.getMessage().contains("ocket closed") &&
+      if (ex==null || ex.getMessage()==null) {
+    	  listener.disconnect();
+    	  LOG.error(DefaultFactory.getFactory().getMessages().getInTraceAgentDisconnected());
+      } else if (!ex.getMessage().contains("ocket closed") &&
           !ex.getMessage().contains("onnection reset"))
       {
         ex.printStackTrace();

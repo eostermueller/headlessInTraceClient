@@ -10,5 +10,5 @@ public interface ICompletedRequestCallback {
 		 * The contents of this method must be thread safe.
 		 * @param t
 		 */
-		void requestCompleted(IRequestEvents events);
+		void requestCompleted(IRequest events);
 }

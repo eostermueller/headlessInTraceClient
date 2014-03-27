@@ -20,10 +20,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.intrace.client.DefaultFactory;
 import org.intrace.client.IFactory;
+import org.intrace.client.IntraceException;
 import org.intrace.client.connection.ConnectState;
 import org.intrace.client.connection.ConnectionException;
 import org.intrace.client.connection.ConnectionTimeout;
-import org.intrace.client.connection.DefaultConnection;
 import org.intrace.client.connection.DefaultConnectionList;
 import org.intrace.client.connection.HostPort;
 import org.intrace.client.connection.IConnection;
@@ -34,7 +34,7 @@ import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.model.ITraceEventParser;
 import org.intrace.client.request.BadCompletedRequestListener;
 import org.intrace.client.request.DefaultRequestSeparator;
-import org.intrace.client.request.IRequestEvents;
+import org.intrace.client.request.IRequest;
 import org.intrace.client.request.RequestConnection;
 import org.intrace.client.request.RequestWriter;
 import org.intrace.client.test.TestConfig;
@@ -59,7 +59,7 @@ public class TestMultiThreadedRequestEventCollection {
 	/**
 	 * Would like to use a closure instead of this, but closures don't exist yet.
 	 */
-	List<IRequestEvents> m_completedRequests = new CopyOnWriteArrayList<IRequestEvents>();
+	List<IRequest> m_completedRequests = new CopyOnWriteArrayList<IRequest>();
 	protected IConnection m_preConfiguredRequestConnection;
 	
 	@Before
@@ -79,11 +79,11 @@ public class TestMultiThreadedRequestEventCollection {
 	 * @throws BadCompletedRequestListener
 	 * @throws IOException
 	 * @throws ConnectionException 
-	 * @throws ConnectionTimeout 
 	 * @throws InterruptedException 
+	 * @throws IntraceException 
 	 */
 	@Test
-	public void canCollectRequestEventsFromMultiThreadedProcess() throws BadCompletedRequestListener, IOException, ConnectionTimeout, ConnectionException, InterruptedException {
+	public void canCollectRequestEventsFromMultiThreadedProcess() throws BadCompletedRequestListener, IOException, ConnectionException, InterruptedException, IntraceException {
 		//Currently, there is a multi-threaded bug that fails at these larger volumes:
 //		final int iterations = 500;
 //		final int numThreads = 50;
@@ -172,27 +172,27 @@ public class TestMultiThreadedRequestEventCollection {
 		assertEquals("Didn't capture the right number of events. ", (iterations * numThreads * 3) ,defaultRequestSeparator.eventCounter.get() );
 		
 		requestWriter = (RequestWriter) requestConnection.getTraceWriter();
-		Queue<IRequestEvents> requests = requestWriter.getCompletedRequestQueue();
+		Queue<IRequest> requests = requestWriter.getCompletedRequestQueue();
 		assertEquals("Did not get the right number of multi-threaded requests to a web server", numThreads*iterations, requests.size() );
 		//System.out.println("Expecting [" + numThreads*iterations + "] requests.  Actual requests["+ requests.size()+ "]");
 		//System.out.println("Found these requests [" + requests.toString() + "]");
-		IRequestEvents myRequestEvents = requests.peek();
-		assertEquals("Was expecting two SQL statements in this request", 2, myRequestEvents.getRequestEvents().size());
-		ITraceEvent event0 = myRequestEvents.getRequestEvents().get(0);
+		IRequest myRequestEvents = requests.peek();
+		assertEquals("Was expecting two SQL statements in this request", 2, myRequestEvents.getEvents().size());
+		ITraceEvent event0 = myRequestEvents.getEvents().get(0);
 		assertEquals("Couldn't not find the SQL statement in the first event from the web server", "INSERT INTO Location (name, address) VALUES(?, ?)", event0.getValue());
-		ITraceEvent event1 = myRequestEvents.getRequestEvents().get(1);
+		ITraceEvent event1 = myRequestEvents.getEvents().get(1);
 		assertEquals("Couldn't not find the SQL statement in the first event from the web server", "INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)", event1.getValue());
 
 		//################ START
 		
-		ConcurrentHashMap<String, IRequestEvents> mapInFlight = requestWriter.getRequestSeparator().getInFlightRequests();
+		ConcurrentHashMap<String, IRequest> mapInFlight = requestWriter.getRequestSeparator().getInFlightRequests();
 		assertEquals("Just submitted several web requests, but found some were unprocessed.",0,mapInFlight.size());
-		for(IRequestEvents request : requests) {
+		for(IRequest request : requests) {
 			if (request==null) {
 				fail("Shouldn't have any nulls here.");
 			} else {
 				//System.out.println("#%#% Found non-null item in hash map");
-				List<ITraceEvent> endEvents = request.getRequestEvents();
+				List<ITraceEvent> endEvents = request.getEvents();
 				for(ITraceEvent x : endEvents) {
 					//System.out.println("parent thread [" + request.getThreadId() + "] simulated thread id [" + x.getThreadId() + "] Event [" + x.getValue() + "]");
 				}
