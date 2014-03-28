@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import org.intrace.client.connection.Callback;
 import org.intrace.client.connection.ConnectState;
 import org.intrace.client.connection.ConnectionException;
 import org.intrace.client.connection.ConnectionTimeout;
@@ -42,7 +43,7 @@ public class TestOtherBasicConnection_RequiresExternalAgent {
 		/**
 		 * InTrace will notify this test object with connection status updates.
 		 */
-		TestCallback tc = new TestCallback();
+		Callback tc = new Callback();
 		IConnectionList cl = DefaultConnectionList.getSingleton();
 		HostPort hostPort = new HostPort(ConnectionTestUtils.DEFAULT_HOST_1,ConnectionTestUtils.DEFAULT_PORT_1);
 		
@@ -100,7 +101,7 @@ public class TestOtherBasicConnection_RequiresExternalAgent {
 		/**
 		 * InTrace will notify this test object with connection status updates.
 		 */
-		TestCallback tc = new TestCallback();
+		Callback tc = new Callback();
 		IConnectionList cl = DefaultConnectionList.getSingleton();
 
 		HostPort hostPort = new HostPort(ConnectionTestUtils.DEFAULT_HOST_1, ConnectionTestUtils.DEFAULT_PORT_1);

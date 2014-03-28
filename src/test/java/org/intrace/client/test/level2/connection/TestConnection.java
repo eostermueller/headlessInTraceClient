@@ -2,9 +2,11 @@ package org.intrace.client.test.level2.connection;
 
 import static org.junit.Assert.*;
 
+
 import java.awt.List;
 
 import org.intrace.client.DefaultFactory;
+import org.intrace.client.connection.Callback;
 import org.intrace.client.connection.ConnectState;
 import org.intrace.client.connection.ConnectionException;
 import org.intrace.client.connection.DefaultConnection;
@@ -19,7 +21,6 @@ import org.intrace.client.connection.command.IAgentCommand;
 import org.intrace.client.model.BeanTraceEventImpl;
 import org.intrace.client.request.BadCompletedRequestListener;
 import org.intrace.client.test.level2.connection.lowLevel.ConnectionTestUtils;
-import org.intrace.client.test.level2.connection.lowLevel.TestCallback;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -37,7 +38,7 @@ public class TestConnection {
 		/**
 		 *  C O N N E C T
 		 */
-		TestCallback testCallback = new TestCallback();
+		Callback testCallback = new Callback();
 		IConnection c = null;
 		try {
 			c = DefaultConnectionList.getSingleton().connect(testCallback, hostPort, commandArray);

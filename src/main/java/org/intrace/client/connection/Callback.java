@@ -1,12 +1,8 @@
-package org.intrace.client.test.level2.connection.lowLevel;
+package org.intrace.client.connection;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.intrace.client.connection.AbstractNoOpConnectionCallback;
-import org.intrace.client.connection.ConnectState;
-import org.intrace.client.connection.DefaultCallback;
 
 /**
  * This class is designed for just this test.
@@ -15,7 +11,7 @@ import org.intrace.client.connection.DefaultCallback;
  * @author e0018740
  *
  */
-public class TestCallback extends DefaultCallback {
+public class Callback extends DefaultCallback {
 	private List<ConnectState> m_connectStates = new CopyOnWriteArrayList<ConnectState>();
 	private List<String> m_listMessages = new ArrayList<String>();
 	public List<String> getMessages() {

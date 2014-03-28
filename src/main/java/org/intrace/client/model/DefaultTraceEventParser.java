@@ -26,32 +26,36 @@ public class DefaultTraceEventParser implements ITraceEventParser {
 		if (singleStackTraceElement.trim().length() > 0) {
 			singleStackTraceElement = singleStackTraceElement.trim();
 			String parts[] = singleStackTraceElement.split("[\\(:\\)]");
-			String packageAndClassAndMethod = parts[0];
-            String fileName = parts[1];
-            String lineNumber = "";
-            if (parts.length >= 3) {
-            	lineNumber = parts[2];
-            }
-			int intLineNumber = UNKNOWN;
+			//if (parts.length>=3) {
+				String packageAndClassAndMethod = parts[0];
+	            String fileName = parts[1];
+	            String lineNumber = "";
+	            if (parts.length >= 3) {
+	            	lineNumber = parts[2];
+	            }
+				int intLineNumber = UNKNOWN;
 
-			int lastPeriod = packageAndClassAndMethod.lastIndexOf('.');
-			if (lastPeriod > 1) {
-				String declaringClass = packageAndClassAndMethod.substring(0, lastPeriod);
-				String methodName = packageAndClassAndMethod.substring(lastPeriod+1);
-				
-				if (UNKNOWN_SOURCE_STR.equals(lineNumber.trim())) {
-					intLineNumber = UNKNOWN_SOURCE;
-				} else {
-					try {
-						intLineNumber = Integer.parseInt(lineNumber);
-					} catch(NumberFormatException nfe) {
-						//don't have a good place to stick this error/data yet.
+				int lastPeriod = packageAndClassAndMethod.lastIndexOf('.');
+				if (lastPeriod > 1) {
+					String declaringClass = packageAndClassAndMethod.substring(0, lastPeriod);
+					String methodName = packageAndClassAndMethod.substring(lastPeriod+1);
+					
+					if (UNKNOWN_SOURCE_STR.equals(lineNumber.trim())) {
+						intLineNumber = UNKNOWN_SOURCE;
+					} else {
+						try {
+							intLineNumber = Integer.parseInt(lineNumber);
+						} catch(NumberFormatException nfe) {
+							//don't have a good place to stick this error/data yet.
+						}
 					}
+					ste = new StackTraceElement(declaringClass, methodName, fileName, intLineNumber);
+				} else {
+					throw new RuntimeException("error parsing stacktrace. Expecting to find a period that separated the class name and method, but instead found this data [" + singleStackTraceElement + "]");
 				}
-				ste = new StackTraceElement(declaringClass, methodName, fileName, intLineNumber);
-			} else {
-				throw new RuntimeException("error parsing stacktrace. Expecting to find a period that separated the class name and method, but instead found this data [" + singleStackTraceElement + "]");
-			}
+			//} else {
+			//	throw new RuntimeException("Error parsing stack trace element [" + singleStackTraceElement + "]  Expecting 3 split parts, but only found [" + parts.length + "]");
+			//}
 		}
 		return ste;
 	}

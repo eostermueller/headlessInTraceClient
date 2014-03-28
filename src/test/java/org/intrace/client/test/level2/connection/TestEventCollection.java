@@ -3,6 +3,7 @@ package org.intrace.client.test.level2.connection;
 import static org.junit.Assert.*;
 
 import org.intrace.client.DefaultFactory;
+import org.intrace.client.connection.Callback;
 import org.intrace.client.connection.ConnectionException;
 import org.intrace.client.connection.DefaultConnection;
 import org.intrace.client.connection.ConnectionTimeout;
@@ -13,7 +14,6 @@ import org.intrace.client.connection.command.ClassInstrumentationCommand;
 import org.intrace.client.connection.command.IAgentCommand;
 import org.intrace.client.request.BadCompletedRequestListener;
 import org.intrace.client.test.level2.connection.lowLevel.ConnectionTestUtils;
-import org.intrace.client.test.level2.connection.lowLevel.TestCallback;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,9 +30,9 @@ public class TestEventCollection {
 		 */
 		IConnection c = null;
 		HostPort hostPort = new HostPort(ConnectionTestUtils.DEFAULT_HOST_1,ConnectionTestUtils.DEFAULT_PORT_1_INT);
-		TestCallback testCallback = new TestCallback();
+		org.intrace.client.connection.Callback callback = new Callback();
 		try {
-			c = DefaultConnectionList.getSingleton().connect(testCallback, hostPort, commandArray);
+			c = DefaultConnectionList.getSingleton().connect(callback, hostPort, commandArray);
 			assertNotNull("Is the test program started?  Didn't get a connection. [" + DefaultFactory.getFactory().getMessages().getTestSetupInstructions() + "]");
 			assertEquals("Didn't not connect successfully. [" + DefaultFactory.getFactory().getMessages().getTestSetupInstructions() + "]", true, c.isConnected());
 			

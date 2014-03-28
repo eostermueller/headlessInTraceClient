@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.intrace.client.DefaultFactory;
 import org.intrace.client.IntraceException;
+import org.intrace.client.connection.Callback;
 import org.intrace.client.connection.ConnectState;
 import org.intrace.client.connection.ConnectionException;
 import org.intrace.client.connection.ConnectionTimeout;
@@ -31,7 +32,6 @@ import org.intrace.client.request.RequestConnection;
 import org.intrace.client.request.RequestWriter;
 import org.intrace.client.test.TestConfig;
 import org.intrace.client.test.level2.connection.lowLevel.ConnectionTestUtils;
-import org.intrace.client.test.level2.connection.lowLevel.TestCallback;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -101,7 +101,7 @@ public class TestRequestEventCollection {
 		DefaultRequestSeparator drs = (DefaultRequestSeparator) rw.getRequestSeparator();
 		drs.eventCounter.set(0);//Reset the event count, for tracking/validation/test purposes.
 		
-		TestCallback testCallback = new TestCallback();
+		org.intrace.client.connection.Callback testCallback = new Callback();
 		requestConnection.addCallback(testCallback);
 		requestConnection.getTraceWriter().setTraceFilterExt(filter);
 		requestConnection.setRequestCompletionEvent(t2);

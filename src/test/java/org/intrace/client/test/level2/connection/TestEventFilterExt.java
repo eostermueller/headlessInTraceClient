@@ -2,6 +2,7 @@ package org.intrace.client.test.level2.connection;
 
 import static org.junit.Assert.*;
 
+
 import org.intrace.client.DefaultFactory;
 import org.intrace.client.connection.ConnectionException;
 import org.intrace.client.connection.ConnectionTimeout;
@@ -15,7 +16,6 @@ import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.model.ITraceEvent.EventType;
 import org.intrace.client.request.BadCompletedRequestListener;
 import org.intrace.client.test.level2.connection.lowLevel.ConnectionTestUtils;
-import org.intrace.client.test.level2.connection.lowLevel.TestCallback;
 import org.intrace.shared.TraceConfigConstants;
 import org.junit.Test;
 

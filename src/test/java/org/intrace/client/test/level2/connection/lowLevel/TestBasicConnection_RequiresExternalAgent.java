@@ -2,6 +2,7 @@ package org.intrace.client.test.level2.connection.lowLevel;
 
 import static org.junit.Assert.*;
 
+import org.intrace.client.connection.Callback;
 import org.intrace.client.connection.ConnectState;
 import org.intrace.client.connection.ConnectionTimeout;
 import org.intrace.client.connection.DefaultConnectionList;
@@ -37,13 +38,13 @@ public class TestBasicConnection_RequiresExternalAgent {
 		/**
 		 * InTrace will notify this test object with connection status updates.
 		 */
-		TestCallback tc = new TestCallback();
+		Callback tc = new Callback();
 		IConnectionList cl = DefaultConnectionList.getSingleton();
 		HostPort hostPort = new HostPort(ConnectionTestUtils.DEFAULT_HOST_1,ConnectionTestUtils.DEFAULT_PORT_1);
 		
 		try {
 			cl.connect(tc, hostPort, null /* no classes to instrument */);
-			TestCallback testCallback = new TestCallback();
+			Callback testCallback = new Callback();
 			assertTrue("Is the test app started?", cl.locateConnection(hostPort).isConnected() );
 			assertTrue("B4 disconnect, expecting at least one message.  Is the test server started?", tc.getMessages().size() > 0 );
 			assertEquals("B4 disconnect....checking count of status messages.  Is the test server started?", 2, tc.getMessages().size() );
@@ -98,7 +99,7 @@ public class TestBasicConnection_RequiresExternalAgent {
 		/**
 		 * InTrace will notify this test object with connection status updates.
 		 */
-		TestCallback testCallback = new TestCallback();
+		Callback testCallback = new Callback();
 		IConnectionList cl = DefaultConnectionList.getSingleton();
 
 		HostPort hostPort = new HostPort(ConnectionTestUtils.DEFAULT_HOST_1, ConnectionTestUtils.DEFAULT_PORT_1);
