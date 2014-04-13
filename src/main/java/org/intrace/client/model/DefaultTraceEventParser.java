@@ -26,7 +26,7 @@ public class DefaultTraceEventParser implements ITraceEventParser {
 		if (singleStackTraceElement.trim().length() > 0) {
 			singleStackTraceElement = singleStackTraceElement.trim();
 			String parts[] = singleStackTraceElement.split("[\\(:\\)]");
-			//if (parts.length>=3) {
+			if (parts.length>=2) {
 				String packageAndClassAndMethod = parts[0];
 	            String fileName = parts[1];
 	            String lineNumber = "";
@@ -53,9 +53,9 @@ public class DefaultTraceEventParser implements ITraceEventParser {
 				} else {
 					throw new RuntimeException("error parsing stacktrace. Expecting to find a period that separated the class name and method, but instead found this data [" + singleStackTraceElement + "]");
 				}
-			//} else {
-			//	throw new RuntimeException("Error parsing stack trace element [" + singleStackTraceElement + "]  Expecting 3 split parts, but only found [" + parts.length + "]");
-			//}
+			} else {
+				throw new RuntimeException("Error parsing stack trace element [" + singleStackTraceElement + "]  Expecting 3 split parts, but only found [" + parts.length + "]");
+			}
 		}
 		return ste;
 	}
