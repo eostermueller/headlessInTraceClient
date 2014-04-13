@@ -44,9 +44,6 @@ public class IncludeAnyOfTheseEventsFilterExt implements ITraceFilterExt {
 					&& criteria.getClassName().equals(traceData.getClassName())
 					&& criteria.getMethodName().equals(traceData.getMethodName())
 					) {
-				
-						
-				
 						if (LOG.isDebugEnabled())  LOG.debug("Found match for [" + traceData.getRawEventData() + "] to [" + m_criteriaList.size() + "] criteria ");
 						return true;
 					} 
