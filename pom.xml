@@ -42,7 +42,10 @@
 							<java fork="true" classname="${intrace.test.class}" classpathref="maven.test.classpath"> 
 								<arg value="10" />
 <!--    <jvmarg value="-javaagent:agent-lib/intrace-agent.jar"/> -->
+<!--
                                                                 <jvmarg value="-javaagent:/Users/erikostermueller/Documents/src/jsource/inTrace_compressed/etogit/org.intrace/org.intrace/build/jars/intrace-agent.jar=[regex-example[gzip-true"/>
+-->
+                                                                <jvmarg value="-javaagent:/Users/erikostermueller/Documents/src/jdist/intrace/etoRelease-1/intrace-agent.jar=[regex-example[gzip-true"/>
 							</java>
                                                 </target>
                                         </configuration>
