@@ -6,7 +6,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   <groupId>org.intrace</groupId>
   <artifactId>headlessInTraceClient</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <name>headlessInTraceClient</name>
   <url>http://maven.apache.org</url>
   <build>
