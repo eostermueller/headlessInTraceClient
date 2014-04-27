@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import org.intrace.client.ITraceWriter;
 import org.intrace.client.connection.ConnectionException;
-import org.intrace.client.connection.DefaultCallback;
 import org.intrace.client.connection.DefaultConnection;
 import org.intrace.client.connection.ConnectionTimeout;
 import org.intrace.client.connection.HostPort;
@@ -15,7 +14,6 @@ import org.intrace.client.connection.command.ClassInstrumentationCommand;
 import org.intrace.client.connection.command.IAgentCommand;
 import org.intrace.client.filter.IncludeAnyOfTheseEventsFilterExt;
 import org.intrace.client.model.ITraceEvent;
-import org.intrace.client.test.level2.connection.lowLevel.ConnectionTestUtils;
 
 import ca.odell.glazedlists.EventList;
 

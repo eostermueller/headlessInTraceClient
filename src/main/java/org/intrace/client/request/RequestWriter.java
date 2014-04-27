@@ -2,17 +2,16 @@ package org.intrace.client.request;
 
 import java.util.Queue;
 
+
 import org.intrace.client.DefaultFactory;
 import org.intrace.client.ITraceWriter;
 import org.intrace.client.IntraceException;
 import org.intrace.client.connection.HostPort;
-import org.intrace.client.connection.NetworkDataReceiverThread2;
 import org.intrace.client.filter.ITraceFilter;
 import org.intrace.client.filter.ITraceFilterExt;
 import org.intrace.client.model.FixedLengthQueue;
 import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.model.ITraceEventParser;
-import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

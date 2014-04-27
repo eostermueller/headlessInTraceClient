@@ -1,7 +1,5 @@
 package org.intrace.client.request;
 
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -9,7 +7,6 @@ import org.intrace.client.DefaultFactory;
 import org.intrace.client.filter.IncludeThisEventFilterExt;
 import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.request.IRequest;
-import org.intrace.client.test.level3.request.TestMultiThreadedRequestEventCollection;
 public class DefaultRequestSeparator implements IRequestSeparator {
 	/**
 	 * Currently, this is used for testing/validation only
