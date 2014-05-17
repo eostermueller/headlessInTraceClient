@@ -38,6 +38,28 @@ public class DefaultConnection implements IConnection {
 	ConnectionDetail getConnectionDetail() {
 		return m_connDetail;
 	}
+
+	@Override
+	public String[] getModifiedClasses() {
+		String modifiedClassesUnparsed = null;
+		getConnectionDetail().getControlThread().sendMessage("[listmodifiedclasses");
+		modifiedClassesUnparsed  = getConnectionDetail().getControlThread().getMessage();
+
+		if (modifiedClassesUnparsed!=null && modifiedClassesUnparsed.length() >= 2) {
+			if (modifiedClassesUnparsed.charAt(modifiedClassesUnparsed.length()-1)==']')
+				modifiedClassesUnparsed = modifiedClassesUnparsed.substring(0, modifiedClassesUnparsed.length()-1);
+			if (modifiedClassesUnparsed.charAt(0)=='[')
+				modifiedClassesUnparsed = modifiedClassesUnparsed.substring(1);
+		}
+
+		String[] rc = null;
+		if ("".equals(modifiedClassesUnparsed.trim()) )
+			rc = null;
+		else
+			rc = modifiedClassesUnparsed.trim().split("\\s*,[,\\s]*");		
+	
+		return rc;
+	}
 	@Override
 	public int getConnCallbackSize() {
 		return getConnectionDetail().getConnCallbacks().size();
@@ -176,7 +198,10 @@ public class DefaultConnection implements IConnection {
 	public void disconnect() {
 		IConnectionList connectionList = DefaultConnectionList.getSingleton();
 		//IConnection cpt = connectionList.locateConnection(m_hostPort);
+		
 		try {
+			this.getConnectionDetail().disconnect();
+			//this.getNetworkTraceThread2().disconnect();
 			connectionList.disconnect(this, getMasterCallback());
 		} catch(DisconnectionException de) {
 			//Since our goal is to disconnect, no need to do anything with the exception.
@@ -248,5 +273,14 @@ public class DefaultConnection implements IConnection {
 	@Override
 	public NetworkDataReceiverThread2 getNetworkTraceThread2() {
 		return getConnectionDetail().getNetworkTraceThread2();
+	}
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("hash [" + this.hashCode() + "]\n");
+		sb.append("isConnected [" + isConnected() + "]\n");
+		sb.append("count of callbacks [" + getConnCallbackSize() + "]");
+		if (this.getConnectionDetail() !=null)
+			sb.append("detail [" + this.getConnectionDetail().toString() + "]\n");
+		return sb.toString();
 	}
 }

@@ -25,6 +25,7 @@ public class FirstTraceExample
   {
     while (true)
     {
+    	interfaceTest();
       Thread.sleep(Long.parseLong(arg));
       workMethod("foobar");
     }
@@ -45,9 +46,16 @@ public class FirstTraceExample
     {
       System.setProperty("a", "Odd time");
     }
+    interfaceTest();
   }
 
-  private static String exceptionMethod()
+  private static void interfaceTest() {
+	MyTestInterface mti = new MyFirstTestImplementor();
+	mti.foo();
+	
+}
+
+private static String exceptionMethod()
   {
     try
     {

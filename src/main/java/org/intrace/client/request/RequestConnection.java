@@ -160,5 +160,9 @@ public class RequestConnection implements IConnection {
 	public IConnectionStateCallback getMasterCallback() {
 		return getConnection().getMasterCallback();
 	}
+	@Override
+	public String[] getModifiedClasses() {
+		return getConnection().getModifiedClasses();
+	}
 
 }

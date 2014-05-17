@@ -28,6 +28,16 @@ public class ControlConnectionThread implements Runnable
     public void setConfig(Map<String,String> progress);
     public void disconnect();
   }
+    public String toString() {
+    	StringBuffer sb = new StringBuffer();
+    	sb.append("hash [" + this.hashCode() + "]\n");
+    	sb.append("socket.isClosed [" + socket.isClosed() + "]\n");
+    	sb.append("socket.isConnected [" + socket.isConnected() + "]\n");
+    	//sb.append("Listener [" + listener.toString() + "]");
+    	sb.append("senderThread [" + senderThread.toString() + "]\n");
+    	sb.append("sendThread [" + sendThread.toString() + "]\n");
+    	return sb.toString();
+    }
   
   private final Socket socket;
   private final IControlConnectionListener listener;

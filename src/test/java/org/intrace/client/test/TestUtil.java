@@ -1,5 +1,12 @@
 package org.intrace.client.test;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +40,31 @@ public class TestUtil {
 			events.add( parser.createEvent(oneEvent, 0));
 		}
 		return events;
+	}
+	/**
+	 * Taken from here:  http://computing.dcu.ie/~humphrys/Notes/Networks/java.html
+	 * @param url
+	 * @throws IOException
+	 */
+	public static void sendHttpGet(String url) throws IOException {
+		 Socket s = new Socket("localhost", 8080);
+
+        OutputStream out = s.getOutputStream();
+        PrintWriter outw = new PrintWriter(out, false);
+        outw.print("GET " + url + " HTTP/1.0\r\n");
+        outw.print("Accept: text/plain, text/html, text/*\r\n");
+        outw.print("\r\n");
+        outw.flush();		
+        InputStream in = s.getInputStream();
+        InputStreamReader inr = new InputStreamReader(in);
+        BufferedReader br = new BufferedReader(inr);
+        String line;
+        while ((line = br.readLine()) != null) 
+        {
+                System.out.println(line);
+        }
+        
+        s.close();
 	}
 
 }

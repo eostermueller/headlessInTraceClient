@@ -8,6 +8,7 @@ import org.intrace.client.ITraceWriter;
 import org.intrace.client.IntraceException;
 import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.model.ITraceEventParser;
+import org.intrace.client.model.ITraceEvent.EventType;
 
 import ca.odell.glazedlists.EventList;
 
@@ -59,10 +60,15 @@ public class DefaultTraceEventWriterImpl implements ITraceWriter {
 				  //BeanTraceEventImpl te = TraceFactory.createTraceEvent(traceLine);
 				  getTraceEvents().getReadWriteLock().writeLock().lock();
 				  ITraceEvent te = m_eventParser.createEvent(traceLine,0);
-				  te.setAgentHostName(hostPort.hostNameOrIpAddress);
-				  te.setAgentPort((short) hostPort.port);
-				  if (getTraceFilterExt().matches(te)) {
-					  getTraceEvents().add(te);
+				  if (te.getEventType()==EventType.DEBUG)
+					  System.out.println("AGENT DEBUG: " + te.getRawEventData() );
+				  else {
+					  te.setAgentHostName(hostPort.hostNameOrIpAddress);
+					  te.setAgentPort((short) hostPort.port);
+					  if (getTraceFilterExt().matches(te)) {
+						  getTraceEvents().add(te);
+					  }
+					  
 				  }
 			} catch (IntraceException e) {
 				e.printStackTrace();

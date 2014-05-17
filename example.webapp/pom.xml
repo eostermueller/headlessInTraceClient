@@ -163,7 +163,7 @@
 <!--
 									<jvmarg value="-javaagent:../agent-lib/intrace-agent.jar=[serverport-9125[gzip-true"/>
 --> 
-									<jvmarg value="-javaagent:/Users/erikostermueller/Documents/src/jsource/inTrace_compressed/etogit/org.intrace/org.intrace/build/jars/intrace-agent.jar=[serverport-9125[gzip-true[exit-stack-trace-true"/>
+									<jvmarg value="-javaagent:/Users/erikostermueller/Documents/src/jsource/inTraceInterface/org.intrace-master/org.intrace/build/jars/intrace-agent.jar=[serverport-9125[gzip-true[exit-stack-trace-true[callbackport-33000"/>
 
 									</java>
 		                                                </target>

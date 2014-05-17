@@ -61,7 +61,7 @@ import org.intrace.client.model.ITraceEvent.EventType;
 public interface ITraceEvent {
 
 	public enum EventType {
-			ENTRY, EXIT, ARG, RETURN
+			ENTRY, EXIT, ARG, RETURN, DEBUG
 	}
 
 	public String getAgentName();

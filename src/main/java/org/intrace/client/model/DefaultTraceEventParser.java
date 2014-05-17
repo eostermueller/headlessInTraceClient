@@ -163,6 +163,8 @@ public class DefaultTraceEventParser implements ITraceEventParser {
 }
 class OtherTraceEventParser implements ITraceEventParser {
 
+	private static final String DEBUG_EVENT_INDICATOR = ":DEBUG:";
+
 	@Override
 	public ITraceEvent createEvent(String rawEventText, int sourceLineNumber) throws IntraceException {
 		ITraceEvent event = DefaultFactory.getFactory().getTraceEvent();
@@ -182,43 +184,54 @@ class OtherTraceEventParser implements ITraceEventParser {
 		}
 		event.setAgentTimeMillis(DefaultTraceEventParser.convertInTraceAgentTimeFmtToLong(pieces[1]));
 		event.setThreadId(pieces[3]);
+		int indexOfDebug = rawEventText.indexOf(DEBUG_EVENT_INDICATOR);
 		
-		String[] colonSeparatedPieces = pieces[4].split(":",5);
-		/*
-				[0]	"" (id=64)	
-				[1]	"org.hsqldb.jdbc.jdbcStatement" (id=65)	
-				[2]	"<init>" (id=66)	
-				[3]	" Arg" (id=67)	
-				[4]	" 1003" (id=68)	
-		 * 
-		 */
-		int indexOfLastPeriod = colonSeparatedPieces[1].lastIndexOf(".");
-		event.setPackageName(colonSeparatedPieces[1].substring(0, indexOfLastPeriod));
-		event.setClassName(colonSeparatedPieces[1].substring(indexOfLastPeriod+1));
-		event.setMethodName(colonSeparatedPieces[2]);
-		event.setRawEventData(rawEventText);
-		
-		if (colonSeparatedPieces[3].trim().startsWith(METHOD_PARAMETER_MARKER_NAMED)) {
-			event.setEventType(EventType.ARG);
-			// Expecting colonSeparatedPieces[3] to look something like this: Arg (request)
-			String[] morePieces = colonSeparatedPieces[3].split(PARENTHESIS_DELIMITERS);
-			if (morePieces.length <2) {
-				throw new RuntimeException("Couldn't find the argument name in this parameter.  Expecting to find one open and one close parenthesis: [" + colonSeparatedPieces[3] + "]");
-			}
-			
-			if ( !morePieces[0].trim().equals(METHOD_PARAMETER_MARKER_UNNAMED)) {
-				throw new RuntimeException("Had trouble parsing [" + colonSeparatedPieces[3] + "]");
-			} else {
-				event.setArgName(morePieces[1]);
-			}
-		} else if (METHOD_PARAMETER_MARKER_UNNAMED.equals(colonSeparatedPieces[3].trim())) {
-			event.setEventType(EventType.ARG);
-		} else if (METHOD_RETURN_VALUE_MARKER.equals(colonSeparatedPieces[3].trim())) {
-			event.setEventType(EventType.RETURN);
+		if (indexOfDebug > 0) {
+			event.setValue(  rawEventText.substring(indexOfDebug+DEBUG_EVENT_INDICATOR.length()+1) );
+			event.setEventType(EventType.DEBUG);
+			event.setRawEventData(rawEventText);
 		} else {
-			throw new RuntimeException("Unable to determine trace event type for raw input [" + rawEventText + "]");
+			String[] colonSeparatedPieces = pieces[4].split(":",5);
+			/*
+					[0]	"" (id=64)	
+					[1]	"org.hsqldb.jdbc.jdbcStatement" (id=65)	
+					[2]	"<init>" (id=66)	
+					[3]	" Arg" (id=67)	
+					[4]	" 1003" (id=68)	
+			 * 
+			 */
+			int indexOfLastPeriod = colonSeparatedPieces[1].lastIndexOf(".");
+			if (indexOfLastPeriod==-1) {
+				throw new IntraceException("Trouble parsing event [" + rawEventText + "] colonSeparatedPieces.length [" + colonSeparatedPieces.length + "] colonSeparatedPieces[1] [" + colonSeparatedPieces[1] + "]");
+			}
+			event.setPackageName(colonSeparatedPieces[1].substring(0, indexOfLastPeriod));
+			event.setClassName(colonSeparatedPieces[1].substring(indexOfLastPeriod+1));
+			event.setMethodName(colonSeparatedPieces[2]);
+			event.setRawEventData(rawEventText);
+			
+			if (colonSeparatedPieces[3].trim().startsWith(METHOD_PARAMETER_MARKER_NAMED)) {
+				event.setEventType(EventType.ARG);
+				// Expecting colonSeparatedPieces[3] to look something like this: Arg (request)
+				String[] morePieces = colonSeparatedPieces[3].split(PARENTHESIS_DELIMITERS);
+				if (morePieces.length <2) {
+					throw new RuntimeException("Couldn't find the argument name in this parameter.  Expecting to find one open and one close parenthesis: [" + colonSeparatedPieces[3] + "]");
+				}
+				
+				if ( !morePieces[0].trim().equals(METHOD_PARAMETER_MARKER_UNNAMED)) {
+					throw new RuntimeException("Had trouble parsing [" + colonSeparatedPieces[3] + "]");
+				} else {
+					event.setArgName(morePieces[1]);
+				}
+			} else if (METHOD_PARAMETER_MARKER_UNNAMED.equals(colonSeparatedPieces[3].trim())) {
+				event.setEventType(EventType.ARG);
+			} else if (METHOD_RETURN_VALUE_MARKER.equals(colonSeparatedPieces[3].trim())) {
+				event.setEventType(EventType.RETURN);
+			} else {
+				throw new RuntimeException("Unable to determine trace event type for raw input [" + rawEventText + "]");
+			}
+			event.setValue(colonSeparatedPieces[4].trim());
+			
 		}
-		event.setValue(colonSeparatedPieces[4].trim());
 		
 		return event;
 	}

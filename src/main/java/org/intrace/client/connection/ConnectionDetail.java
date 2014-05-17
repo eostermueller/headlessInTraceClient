@@ -92,14 +92,21 @@ public class ConnectionDetail implements IControlConnectionListener, IConnection
 	  @Override
 	  public String toString() {
 		  StringBuilder sb = new StringBuilder();
-		  
-		  
+		  sb.append("getConnectState[" + getConnectState() + "]\n");
+		  sb.append("isConnected [" + this.isConnected() + "]\n");
+		  sb.append("getConnCallbacks.size [" + getConnCallbacks().size() + "]");
 		  sb.append("Connection state [" + this.m_connectState + "]\n");
 		  if (m_remoteAddress!=null) {
 			  sb.append(m_remoteAddress.getCanonicalHostName()).append("-->CanonicalHostName\n");
 			  sb.append(m_remoteAddress.getHostAddress()).append("-->HostAddress\n");
 			  sb.append(m_remoteAddress.isLinkLocalAddress()).append("-->isLinkLocal\n");
 		  }
+		  
+		  if (getControlThread()!=null)
+			  sb.append("control thread [" + getControlThread().toString() + "]\n");
+		  
+		  if (this.getNetworkTraceThread2()!=null)
+			  sb.append("trace thread [" + this.getNetworkTraceThread2().toString() + "]\n"); 
 		  
 		  return sb.toString();
 	  }
@@ -156,7 +163,8 @@ public class ConnectionDetail implements IControlConnectionListener, IConnection
 	 */
 	@Override
 	public void disconnect() {
-		getNetworkTraceThread2().requestDisconnect();
+		if (getNetworkTraceThread2()!=null)
+			getNetworkTraceThread2().requestDisconnect();
 		//throw new UnsupportedOperationException(ClientStrings.HARD_DISSCONNECT_NO_LONGER_SUPPORTED);
 		
 		//ControlConnectionThread#run is calling the above method, so can't throw the above exception quite yet.
@@ -223,7 +231,7 @@ public class ConnectionDetail implements IControlConnectionListener, IConnection
 	 * Why do we have ConnectionPartOne and ConnectionPartTwo?
 	 * There is a hand off, and it happens right here.
 	 * Once ConnectionPartOne is finished with it's business, 
-	 * it invokes this setCocket() method.
+	 * it invokes this setSocket() method.
 	 */
 	public void setSocket(Socket socket) {
 	    if (socket != null)
@@ -233,7 +241,6 @@ public class ConnectionDetail implements IControlConnectionListener, IConnection
 	      m_controlThread = new DebugControlConnectionThread(socket, this);
 	      m_controlThread.start();
 	      executeStartupCommands();
-//	      m_controlThread.sendMessage(AgentConfigConstants.INSTRU_ENABLED+"true");
 	      m_controlThread.sendMessage("getsettings");
 
 	      m_controlThread.sendMessage("[out-network");

@@ -18,8 +18,6 @@ public class ConnectionTestUtils {
 	/**
 	 * org.intrace.test.webapp.servlet.HelloWorld.doGet
 	 */
-//	public static final String TEST_WEB_REQUEST_COMPLETION_CLASS = "java.lang.Thread";
-//	public static final String TEST_WEB_REQUEST_COMPLETION_METHOD = "run";
 	public static final String TEST_WEB_REQUEST_COMPLETION_CLASS = "org.intrace.test.webapp.servlet.HelloWorld";
 	public static final String TEST_WEB_REQUEST_COMPLETION_METHOD = "doGet";
 	public static final long EVENT_COLLECTION_TIME_MS = 1000;

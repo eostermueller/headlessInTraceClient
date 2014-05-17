@@ -83,6 +83,17 @@ public class NetworkDataReceiverThread2 implements Runnable
   private final INetworkOutputConfig outputConfig;
 private HostPort m_hostPort = null;
 
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("hash [" + this.hashCode() + "]\n");
+		sb.append("m_consumerRequestedDisconnect [" + m_consumerRequestedDisconnect + "]\n");
+		sb.append("traceSocket.isClosed() [" + traceSocket.isClosed() + "]\n");
+		//sb.append("traceSocket.isConnected() [" + traceSocket.isConnected() + "]\n");
+		sb.append("count of trace writers [" + getTraceWriters().size()  + "]\n");
+		
+		return sb.toString();
+	}
   public NetworkDataReceiverThread2(InetAddress address, int networkTracePort,
       INetworkOutputConfig outputConfig)
       throws IOException

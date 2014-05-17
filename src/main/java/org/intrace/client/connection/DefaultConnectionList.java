@@ -71,6 +71,7 @@ public class DefaultConnectionList implements IConnectionList {
 		if (conn==null) {
 			throw new RuntimeException("Don't support null connections");
 		}
+		
 		int numRemainingCallbacks =  conn.removeConnectionStatusCallback(connectionCallback); // disconnect is called downstream, but only if no other callbacks are registered.
 		
 		if (numRemainingCallbacks > 0) {

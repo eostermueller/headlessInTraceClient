@@ -40,6 +40,6 @@ public interface IConnection {
 
 	public abstract void setHostPort(HostPort hostPort);
 	public abstract IConnectionStateCallback getMasterCallback();
+	String[] getModifiedClasses();
 	
-
 }

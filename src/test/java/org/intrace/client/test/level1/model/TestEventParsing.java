@@ -340,6 +340,34 @@ public class TestEventParsing {
 		
 		assertEquals("Can't parse timestamp (ms)", 46090792, actualEvent.getAgentTimeMillis());
 	}
+	@Test
+	public void canParseDebugEvent() throws IntraceException {
+		String debugMessage = "Ignoring class not matching the active include regex: java.util.concurrent.locks.LockSupport";
+		String rawEventText = "[12:48:10.792]:[12]:DEBUG: " + debugMessage;
+		
+		ITraceEvent expectedEvent = new DefaultTraceEvent(
+				rawEventText,						//raw event text
+				null,	//package
+				null,					//class
+				EXPECTED_TIMESTAMP/*"12:48:10.792"*/,					//time in millis
+				null,							//method
+				EventType.DEBUG,					//trace event type
+				null,								//arg or return value
+				false,								//isConstructor
+				"12",								//threadId
+				-1,								//Source Code line number (default).
+				null);							//Name of the argument				
+
+		ITraceEvent actualEvent = m_eventParser.createEvent(rawEventText,0);
+
+		assertEquals("Could not find debug message", debugMessage, actualEvent.getValue());
+		assertEquals("Could not find event type", expectedEvent.getEventType(), actualEvent.getEventType());
+
+		assertEquals("Could not find agentTime", expectedEvent.getAgentTimeMillis(), actualEvent.getAgentTimeMillis());
+		assertEquals("Could not find constructor indicator", expectedEvent.isConstructor(), actualEvent.isConstructor());
+		assertEquals("Could not find thread id", expectedEvent.getThreadId(), actualEvent.getThreadId());
+		assertEquals("Could not find Argument name", expectedEvent.getArgName(), actualEvent.getArgName());
+	}
 	
 
 }

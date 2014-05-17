@@ -15,6 +15,10 @@
         <servlet-name>HelloServlet</servlet-name>
         <servlet-class>example.webapp.servlet.HelloWorld</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>HelloExecuteQuery</servlet-name>
+        <servlet-class>example.webapp.servlet.HelloExecuteQuery</servlet-class>
+    </servlet>
 
        <servlet>
             <servlet-name>applicationContext</servlet-name>
@@ -27,6 +31,11 @@
         <url-pattern>/hello</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>HelloExecuteQuery</servlet-name>
+        <url-pattern>/helloExecuteQuery</url-pattern>
+    </servlet-mapping>
+    
 	<servlet-mapping>
 	    <servlet-name>applicationContext</servlet-name>
 	    <url-pattern>/</url-pattern>

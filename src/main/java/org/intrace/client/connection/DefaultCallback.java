@@ -45,12 +45,24 @@ public class DefaultCallback implements IConnectionStateCallback {
 	}
 
 	/**
-	 * Need to learn how to use this.  Is it even useful?
+	 * org/intrace/agent/ClassTransformer.java (part of agent code) drives the traffic to this method.
+	 * If you place this line of code in the method:
+	 * <pre>
+		System.out.println("DefaultCallback.setProgress() [" + progress.toString() + "]");
+		<pre>
+		...then you'll get output that looks like this:
+		<pre>
+	   	DefaultCallback.setProgress() [{NUM_PROGRESS_COUNT=2700, NUM_PROGRESS_ID=NUM_PROGRESS_ID, NUM_PROGRESS_TOTAL=2740}]
+	  	DefaultCallback.setProgress() [{NUM_PROGRESS_COUNT=2710, NUM_PROGRESS_ID=NUM_PROGRESS_ID, NUM_PROGRESS_TOTAL=2740}]
+	  	DefaultCallback.setProgress() [{NUM_PROGRESS_COUNT=2720, NUM_PROGRESS_ID=NUM_PROGRESS_ID, NUM_PROGRESS_TOTAL=2740}]
+	  	DefaultCallback.setProgress() [{NUM_PROGRESS_COUNT=2730, NUM_PROGRESS_ID=NUM_PROGRESS_ID, NUM_PROGRESS_TOTAL=2740}]
+	  	DefaultCallback.setProgress() [{NUM_PROGRESS_DONE=true, NUM_PROGRESS_ID=NUM_PROGRESS_ID, NUM_PROGRESS_TOTAL=2740, NUM_PROGRESS_COUNT=2740}]
+	   </pre>
+	   
 	 */
 	@Override
 	public void setProgress(Map<String, String> progress) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	/**
@@ -58,7 +70,7 @@ public class DefaultCallback implements IConnectionStateCallback {
 	 */
 	@Override
 	public void setStatus(Map<String, String> progress) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	/**
@@ -66,7 +78,7 @@ public class DefaultCallback implements IConnectionStateCallback {
 	 */
 	@Override
 	public void setConfig(Map<String, String> progress) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	
