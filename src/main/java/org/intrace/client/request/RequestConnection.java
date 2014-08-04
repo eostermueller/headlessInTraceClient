@@ -12,6 +12,7 @@ import org.intrace.client.connection.IConnectionStateCallback;
 import org.intrace.client.connection.NetworkDataReceiverThread2;
 import org.intrace.client.connection.command.ClassInstrumentationCommand;
 import org.intrace.client.connection.command.IAgentCommand;
+import org.intrace.client.filter.ITraceFilterExt;
 import org.intrace.client.filter.IncludeAnyOfTheseEventsFilterExt;
 import org.intrace.client.model.ITraceEvent;
 
@@ -20,6 +21,7 @@ import ca.odell.glazedlists.EventList;
 /**
  * This is a layer written on top of "Connection" that
  * sorts the incoming trace events by thread.
+ * 
  * Once an "exit" for the "thread completion method" event is received, the events for that particular thread are considered
  * complete and the CompletedListenerRequest fires its "requestCompleted" method.
  * This class only provides "request" support an inTrace agent in a single JVM -- rephrased, 
@@ -29,7 +31,6 @@ import ca.odell.glazedlists.EventList;
  */
 public class RequestConnection implements IConnection {
 	private IConnection m_connection = null;
-	private ITraceEvent m_requestCompletionEvent = null; 
 	private IAgentCommand m_commandArray[] = null;
 	public IAgentCommand[] getCommandArray() {
 		return m_commandArray;
@@ -50,7 +51,7 @@ public class RequestConnection implements IConnection {
 			throws ConnectionTimeout, ConnectionException, BadCompletedRequestListener {
 		//m_commandArray = startupCommandAry;
 		setCommandArray(startupCommandAry);
-		enhanceCommandArray(startupCommandAry);
+		//enhanceCommandArray(startupCommandAry);
 		return m_connection.connect(host, port, getCommandArray());
 	}
 	/**
@@ -65,9 +66,6 @@ public class RequestConnection implements IConnection {
 	 * @throws BadCompletedRequestListener
 	 */
 	private void enhanceCommandArray(IAgentCommand[] startupCommandAry) throws BadCompletedRequestListener {
-		if (m_requestCompletionEvent.validate()==false) {
-		   throw new BadCompletedRequestListener(m_requestCompletionEvent);
-		}
 		if (getTraceWriter().getTraceFilterExt() instanceof IncludeAnyOfTheseEventsFilterExt) {
 			IncludeAnyOfTheseEventsFilterExt myFilter =  (IncludeAnyOfTheseEventsFilterExt) getTraceWriter().getTraceFilterExt();
 			ClassInstrumentationCommand cic = new ClassInstrumentationCommand();
@@ -86,6 +84,12 @@ public class RequestConnection implements IConnection {
 	public void disconnect() {
 		m_connection.disconnect();
 	}
+	/**
+	 * TODO:  implementation details aren't leaking out of ITraceWriter, they're gushing.  How should this be fixed?
+	 * See the cast to RequestWriter?
+	 * 
+	 * @param callback
+	 */
 	public void setCompletedRequestCallback(ICompletedRequestCallback callback) {
 		RequestWriter requestWriter = (RequestWriter) m_connection.getTraceWriter();
 		requestWriter.getRequestSeparator().setCompletedRequestCallback(callback);
@@ -99,12 +103,13 @@ public class RequestConnection implements IConnection {
 	 * @param string
 	 * @param string2
 	 */
-	public void setRequestCompletionEvent(ITraceEvent requestCompletionEvent) {
-		m_requestCompletionEvent = requestCompletionEvent;
+	public void setRequestCompletionFilter(ITraceFilterExt val) {
 		RequestWriter requestWriter = (RequestWriter) m_connection.getTraceWriter();
-		requestWriter.getRequestSeparator().setRequestCompletionEvent(m_requestCompletionEvent);
-		
-		//m_threadCompletionMethodName = threadCompletionMethodName;
+		requestWriter.getRequestSeparator().setRequestCompletionFilter(val);
+	}
+	public void setRequestStartFilter(ITraceFilterExt val) {
+		RequestWriter requestWriter = (RequestWriter) m_connection.getTraceWriter();
+		requestWriter.getRequestSeparator().setRequestStartFilter(val);
 	}
 	@Override
 	public EventList<ITraceEvent> getTraceEvents() {

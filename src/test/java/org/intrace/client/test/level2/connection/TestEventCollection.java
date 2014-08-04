@@ -45,7 +45,6 @@ public class TestEventCollection {
 			System.out.println("Found [" + traceEventCount + "] events.");
 			assertTrue("Collected fewer than 50 trace events", traceEventCount > 50);
 			
-			c.disconnect();
 		} catch (ConnectionTimeout e) {
 			e.printStackTrace();
 			fail("Received a connection timeout.  Is the test program example.FirstTraceExample running? [" + e.getMessage() + "]");
@@ -55,6 +54,8 @@ public class TestEventCollection {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			c.disconnect();
 		}
 		
 	

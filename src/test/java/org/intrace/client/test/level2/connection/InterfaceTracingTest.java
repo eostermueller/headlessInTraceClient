@@ -13,6 +13,7 @@ import org.intrace.client.connection.command.IAgentCommand;
 import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.request.BadCompletedRequestListener;
 import org.intrace.client.test.level2.connection.lowLevel.ConnectionTestUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class InterfaceTracingTest {
@@ -22,13 +23,13 @@ public class InterfaceTracingTest {
 	private static final String TEST_IMPLEMENTOR_2 = "MySecondTestImplementor";
 	private static final String TEST_PACKAGE = "example";
 	@Test
-	public void canDetectImplementor() throws BadCompletedRequestListener {
+	public void canDetectImplementorGivenInterface() throws BadCompletedRequestListener {
 		
 		ClassInstrumentationCommand cic = new ClassInstrumentationCommand();
 		//cic.setIncludeClassRegEx(ConnectionTestUtils.TEST_CLASS_TO_INSTRUMENT_1);
 		cic.setIncludeClassRegEx(TEST_PACKAGE + "." + TEST_INTERFACE);
 		IAgentCommand commandArray[] = { cic };
-		HostPort hostPort = new HostPort(ConnectionTestUtils.DEFAULT_HOST_1,ConnectionTestUtils.DEFAULT_PORT_1_INT);
+		HostPort hostPort = new HostPort(ConnectionTestUtils.DEFAULT_HOST_1,ConnectionTestUtils.DEFAULT_PORT_1);
 		
 		try {
 

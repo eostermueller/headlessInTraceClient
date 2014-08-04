@@ -49,6 +49,7 @@ public class TestOtherBasicConnection_RequiresExternalAgent {
 		
 		try {
 			cl.connect(tc, hostPort, null /* no classes to instrument */);
+			assertEquals("expected one connection in the ConnectionList because we just connected.", 1, cl.size());
 			assertTrue("B4 disconnect, expecting at least one message.  Is the test server started?", tc.getMessages().size() > 0 );
 			
 			//Just shows that we got the history of connections, where every connection starts out dead.
@@ -73,6 +74,9 @@ public class TestOtherBasicConnection_RequiresExternalAgent {
 				//assertEquals("expected a single connection in the ConnectionList", 1, cl.size());
 				//myConn.disconnect();
 				cl.disconnect(myConn, tc);
+				if (cl.size()==1);
+				Thread.sleep(10000);
+				if (cl.size()==1);
 				assertEquals("expected zero connections in the ConnectionList because we just disconnected.", 0, cl.size());
 				assertEquals("checking second status message b4 dis-connecting", ConnectState.DISCONNECTED, tc.getConnectState());
 				

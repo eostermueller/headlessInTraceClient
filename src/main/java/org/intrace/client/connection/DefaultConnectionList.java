@@ -173,8 +173,13 @@ public class DefaultConnectionList implements IConnectionList {
 		//m_connections.add(cem);
 		m_mapConnections.put(hostPort.key(), c);
 	}
+	private void dump() {
+		for (IConnection c : m_mapConnections.values())
+			System.out.println("Found connection with hash [" + c.hashCode() + "] toString[" + c.toString() + "]");
+	}
 	@Override
 	public int size() {
+		dump();
 		return m_mapConnections.size();
 	}
 	/**

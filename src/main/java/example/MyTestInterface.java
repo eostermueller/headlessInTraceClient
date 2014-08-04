@@ -2,5 +2,5 @@ package example;
 
 public interface MyTestInterface {
 
-	void foo();
+	void foo(long pause);
 }

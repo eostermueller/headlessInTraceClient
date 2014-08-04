@@ -13,7 +13,7 @@ import org.intrace.client.DefaultFactory;
 import org.intrace.client.ITraceWriter;
 import org.intrace.client.filter.ITraceFilter;
 import org.intrace.client.filter.ITraceFilterExt;
-import org.intrace.client.filter.IncludeThisEventFilterExt;
+//import org.intrace.client.filter.IncludeThisEventFilterExt;
 import org.intrace.client.model.ITraceEvent;
 import org.intrace.shared.Base64;
 import org.slf4j.LoggerFactory;

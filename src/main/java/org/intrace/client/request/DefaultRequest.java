@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.intrace.client.model.ITraceEvent;
 
 public class DefaultRequest implements IRequest {
+	private AtomicBoolean m_initialized = new AtomicBoolean(false);
 	private List<ITraceEvent> m_events = new CopyOnWriteArrayList<ITraceEvent>();
 	private String m_uniqueId = null;
 	
@@ -25,6 +27,8 @@ public class DefaultRequest implements IRequest {
 		this.m_uniqueId = uniqueId;
 	}
 	private String m_threadId = null;
+	private String m_url;
+	private String m_httpRespCode;
 	@Override
 	public List<ITraceEvent> getEvents() {
 		return m_events;
@@ -42,6 +46,50 @@ public class DefaultRequest implements IRequest {
 	@Override
 	public String getThreadId(){ 
 		return m_threadId;
+	}
+
+	@Override
+	public String getUrl() {
+		return m_url;
+	}
+
+	/**  Souce data looks like this:
+HttpServlet raw [[16:19:06.380]:[19]:javax.servlet.http.HttpServlet:service: {:762]
+HttpServlet raw [[16:19:06.380]:[19]:javax.servlet.http.HttpServlet:service: Arg (req): (GET /test/helloExecuteQuery)@376028835 org.eclipse.jetty.server.Request@1669bea3]
+HttpServlet raw [[16:19:06.380]:[19]:javax.servlet.http.HttpServlet:service: Arg (res): HTTP/1.1 200 
+]	 * 
+	 */
+	@Override
+	public void setUrl(String val) {
+		m_url = val;
+		
+	}
+
+	@Override
+	public String getHttpResponseCode() {
+		return m_httpRespCode;
+	}
+
+	/**  Souce data looks like this:
+HttpServlet raw [[16:19:06.380]:[19]:javax.servlet.http.HttpServlet:service: {:762]
+HttpServlet raw [[16:19:06.380]:[19]:javax.servlet.http.HttpServlet:service: Arg (req): (GET /test/helloExecuteQuery)@376028835 org.eclipse.jetty.server.Request@1669bea3]
+HttpServlet raw [[16:19:06.380]:[19]:javax.servlet.http.HttpServlet:service: Arg (res): HTTP/1.1 200 
+]	 * 
+	 */
+	@Override
+	public void setHttpResponseCode(String val) {
+		m_httpRespCode = val;
+	}
+
+	@Override
+	public boolean isInitialized() {
+		return this.m_initialized.get();
+	}
+
+	@Override
+	public void setInitialized(boolean val) {
+		m_initialized.set(val);
+		
 	}
 
 }

@@ -140,8 +140,9 @@ public class DefaultConnection implements IConnection {
 			} catch (ExecutionException e) {
 	            getMasterCallback().setConnectionStatusMsg( e.toString() ); 
 	            getMasterCallback().setConnectState(ConnectState.DISCONNECTED_ERR);
+			} finally {
+		        executor.shutdownNow();
 			}
-	        executor.shutdownNow();
 		}
         return ynRC;
 	}

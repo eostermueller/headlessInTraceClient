@@ -7,7 +7,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.intrace.client.DefaultFactory;
 import org.intrace.client.IntraceException;
+import org.intrace.client.filter.ITraceFilterExt;
 import org.intrace.client.filter.IncludeThisEventFilterExt;
+import org.intrace.client.filter.IncludeThisMethodFilterExt;
 import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.request.ICompletedRequestCallback;
 import org.intrace.client.request.IRequest;
@@ -21,13 +23,22 @@ public class TestRequestSeparator {
 	 * Would like to use a closure instead of this, but closures don't exist yet.
 	 */
 	List<IRequest> m_completedRequests = new CopyOnWriteArrayList<IRequest>();
+	private static final String THREAD_START_EVENT = "[08:36:43.885]:[412]:java.lang.Thread:run: {:682";
 	private static final String THREAD_COMPLETION_EVENT = "[08:36:43.885]:[412]:java.lang.Thread:run: }:682";
+	private static final String THREAD_START_EVENT2      = "[08:36:43.885]:[412]:javax.servlet.http.HttpServlet:service: {:682";
+	private static final String THREAD_COMPLETION_EVENT2 = "[08:36:43.885]:[412]:javax.servlet.http.HttpServlet:service: }:682";
 
 	private ITraceEvent m_requestCompletionEvent = null;
+	private ITraceEvent m_requestStartEvent = null;
+	private ITraceEvent m_requestCompletionEvent2 = null;
+	private ITraceEvent m_requestStartEvent2 = null;
 
 	@Before
 	public void setup() throws IntraceException {
+		m_requestStartEvent = DefaultFactory.getFactory().getEventParser().createEvent(THREAD_START_EVENT, 0);
 		m_requestCompletionEvent = DefaultFactory.getFactory().getEventParser().createEvent(THREAD_COMPLETION_EVENT, 0);
+		m_requestCompletionEvent2 = DefaultFactory.getFactory().getEventParser().createEvent(THREAD_COMPLETION_EVENT2, 0);
+		m_requestStartEvent2 = DefaultFactory.getFactory().getEventParser().createEvent(THREAD_START_EVENT2, 0);
 	}
 	
 
@@ -43,7 +54,19 @@ public class TestRequestSeparator {
 				+ "[08:36:43.885]:[414]:java.lang.Thread:run: }:682\n";
 		List<ITraceEvent> events = TestUtil.createEvents(EVENTS_FROM_MULTIPLE_REQUESTS_PRISTINE);
 		IRequestSeparator requestSeparator = DefaultFactory.getFactory().getRequestSeparator();
-		requestSeparator.setRequestCompletionEvent(m_requestCompletionEvent);//Whenever this particular event first, that marks the end of a thread/request.
+		
+		IncludeThisEventFilterExt eventFilter = new IncludeThisEventFilterExt();
+		eventFilter.setFilterCriteria(m_requestCompletionEvent);
+		
+		requestSeparator.setRequestCompletionFilter(eventFilter);
+		requestSeparator.setRequestStartFilter( new ITraceFilterExt() {
+			@Override
+			public boolean matches(ITraceEvent traceData) {
+				return true;
+			}
+		});
+		
+		//requestSeparator.setRequestCompletionEvent(m_requestCompletionEvent);//Whenever this particular event first, that marks the end of a thread/request.
 		
 		m_completedRequests.clear();
 		ICompletedRequestCallback requestCallback = new ICompletedRequestCallback() {
@@ -74,26 +97,37 @@ public class TestRequestSeparator {
 		 * These events represent the same two events getting fired repeatedly, but synchronously, where one thread doesn't start until the previous one ends.
 		 */
 		final String EVENTS_FROM_MULTIPLE_THREADS_PRISTINE_8 = 
-			       "[08:36:43.885]:[412]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
+ 			       "[08:36:43.885]:[412]:java.lang.Thread:run: {:682\n"
+			     + "[08:36:43.885]:[412]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
 			     + "[08:36:43.885]:[412]:java.lang.Thread:run: }:682\n"
+			     + "[08:36:43.885]:[413]:java.lang.Thread:run: {:682\n"
 			     + "[08:36:43.885]:[413]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
 			     + "[08:36:43.885]:[413]:java.lang.Thread:run: }:682\n"
+			     + "[08:36:43.885]:[414]:java.lang.Thread:run: {:682\n"
 			     + "[08:36:43.885]:[414]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
 			     + "[08:36:43.885]:[414]:java.lang.Thread:run: }:682\n"
+			     + "[08:36:43.885]:[415]:java.lang.Thread:run: {:682\n"
 			     + "[08:36:43.885]:[415]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
 			     + "[08:36:43.885]:[415]:java.lang.Thread:run: }:682\n"
+			     + "[08:36:43.885]:[416]:java.lang.Thread:run: {:682\n"
 			     + "[08:36:43.885]:[416]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
 			     + "[08:36:43.885]:[416]:java.lang.Thread:run: }:682\n"
+			     + "[08:36:43.885]:[417]:java.lang.Thread:run: {:682\n"
 			     + "[08:36:43.885]:[417]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
 			     + "[08:36:43.885]:[417]:java.lang.Thread:run: }:682\n"
+			     + "[08:36:43.885]:[418]:java.lang.Thread:run: {:682\n"
 			     + "[08:36:43.885]:[418]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
 			     + "[08:36:43.885]:[418]:java.lang.Thread:run: }:682\n"
+			     + "[08:36:43.885]:[419]:java.lang.Thread:run: {:682\n"
 			     + "[08:36:43.885]:[419]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
 			     + "[08:36:43.885]:[419]:java.lang.Thread:run: }:682\n";
 				
 		List<ITraceEvent> events = TestUtil.createEvents(EVENTS_FROM_MULTIPLE_THREADS_PRISTINE_8);
 		IRequestSeparator requestSeparator = DefaultFactory.getFactory().getRequestSeparator();
-		requestSeparator.setRequestCompletionEvent(m_requestCompletionEvent);//Whenever this particular event first, that marks the end of a thread/request.
+		
+		//requestSeparator.setRequestCompletionEvent(m_requestCompletionEvent);//Whenever this particular event first, that marks the end of a thread/request.
+		requestSeparator.setRequestCompletionFilter( new IncludeThisEventFilterExt(m_requestCompletionEvent));
+		requestSeparator.setRequestStartFilter( new IncludeThisEventFilterExt(m_requestStartEvent));
 		
 		m_completedRequests.clear();
 		ICompletedRequestCallback requestCallback = new ICompletedRequestCallback() {
@@ -141,13 +175,20 @@ public class TestRequestSeparator {
 		 * This test validates that the events for 413 do not get sent.
 		 */
 		final String ONE_COMPLETE_AND_ONE_INCOMPLETE = 
-			       "[08:36:43.885]:[412]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
+			       "[08:36:43.885]:[412]:java.lang.Thread:run: {:682\n"
+			     + "[08:36:43.885]:[412]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
 			     + "[08:36:43.885]:[412]:java.lang.Thread:run: }:682\n"
 			     + "[08:36:43.885]:[413]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n";
 				
 		List<ITraceEvent> events = TestUtil.createEvents(ONE_COMPLETE_AND_ONE_INCOMPLETE);
 		IRequestSeparator requestSeparator = DefaultFactory.getFactory().getRequestSeparator();
-		requestSeparator.setRequestCompletionEvent(m_requestCompletionEvent);//Whenever this particular event first, that marks the end of a thread/request.
+		IncludeThisEventFilterExt methodFilter = new IncludeThisEventFilterExt();
+		methodFilter.setFilterCriteria(m_requestCompletionEvent);
+		requestSeparator.setRequestStartFilter( new IncludeThisEventFilterExt(this.m_requestStartEvent));
+		
+		requestSeparator.setRequestCompletionFilter(methodFilter);
+		
+		//requestSeparator.setRequestCompletionEvent(m_requestCompletionEvent);//Whenever this particular event first, that marks the end of a thread/request.
 		
 		m_completedRequests.clear();
 		ICompletedRequestCallback requestCallback = new ICompletedRequestCallback() {
@@ -188,7 +229,15 @@ public class TestRequestSeparator {
 		 * Once those 8 events are fired, all 8 threads fire their second event.
 		 */
 		final String EVENTS_FROM_MULTIPLE_THREADS_INTERLEAVED_8 = 
-			       "[08:36:43.885]:[412]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
+			       "[08:36:43.885]:[413]:java.lang.Thread:run: {:682\n"
+			     + "[08:36:43.885]:[414]:java.lang.Thread:run: {:682\n"
+			     + "[08:36:43.885]:[412]:java.lang.Thread:run: {:682\n"
+			     + "[08:36:43.885]:[415]:java.lang.Thread:run: {:682\n"
+			     + "[08:36:43.885]:[417]:java.lang.Thread:run: {:682\n"
+			     + "[08:36:43.885]:[418]:java.lang.Thread:run: {:682\n"
+			     + "[08:36:43.885]:[416]:java.lang.Thread:run: {:682\n"
+			     + "[08:36:43.885]:[419]:java.lang.Thread:run: {:682\n"
+			     + "[08:36:43.885]:[412]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
 			     + "[08:36:43.885]:[413]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
 			     + "[08:36:43.885]:[414]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
 			     + "[08:36:43.885]:[415]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
@@ -207,7 +256,16 @@ public class TestRequestSeparator {
 				
 		List<ITraceEvent> events = TestUtil.createEvents(EVENTS_FROM_MULTIPLE_THREADS_INTERLEAVED_8);
 		IRequestSeparator requestSeparator = DefaultFactory.getFactory().getRequestSeparator();
-		requestSeparator.setRequestCompletionEvent(m_requestCompletionEvent);//Whenever this particular event first, that marks the end of a thread/request.
+		
+		//IncludeThisEventFilterExt methodFilter = new IncludeThisEventFilterExt();
+		//methodFilter.setFilterCriteria(m_requestCompletionEvent);
+		
+		//requestSeparator.setRequestCompletionFilter(methodFilter);
+		requestSeparator.setRequestCompletionFilter(new IncludeThisEventFilterExt(m_requestCompletionEvent));
+		requestSeparator.setRequestStartFilter( new IncludeThisEventFilterExt(m_requestStartEvent));
+		
+				
+//		requestSeparator.setRequestCompletionEvent(m_requestCompletionEvent);//Whenever this particular event first, that marks the end of a thread/request.
 		
 		m_completedRequests.clear();
 		ICompletedRequestCallback requestCallback = new ICompletedRequestCallback() {
@@ -231,6 +289,93 @@ public class TestRequestSeparator {
 		myTestFilter.setFilterCriteria(testEvent);
 		
 		assertEquals("Added eight requests, each with one events, but didn't get eight", 8 /* events.size() */, m_completedRequests.size());
+		for(IRequest request : m_completedRequests) {
+			assertEquals("Expected one event for each request", 1, request.getEvents().size());
+			
+			assertTrue("Expected a particular event type, class name and package", 
+					myTestFilter.matches(request.getEvents().get(0)));
+		}
+		
+		assertEquals("Whoops.  The RequestSeparator should have evicted all the requests, but some were left",0,requestSeparator.size());
+	}
+	
+	/**
+	 * 
+	 * See the two "run" methods?
+	 * <pre>
+			     + "[08:36:43.885]:[415]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
+			     + "[08:36:43.885]:[415]:java.lang.Thread:run: }:682\n"
+			     + "[08:36:43.885]:[415]:java.lang.Thread:run: }:682\n"
+	 * </pre>
+	 * 
+	 * @throws IntraceException
+	 */
+	@Test
+	public void canSeparateManyEventsIntoEightRequestsAndSkipDuplicates() throws IntraceException {
+		ITraceEvent myRequestCompletionEvent = null;
+		ITraceEvent myRequestStartEvent = null;
+
+		/**
+		 * These events represent the same two events getting fired repeatedly, but synchronously, where one thread doesn't start until the previous one ends.
+		 */
+		final String EVENTS_FROM_MULTIPLE_THREADS_PRISTINE_8 = 
+			       "[08:36:43.885]:[412]:javax.servlet.http.HttpServlet:service: {:682\n"
+			     + "[08:36:43.885]:[412]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
+			     + "[08:36:43.885]:[412]:javax.servlet.http.HttpServlet:service: }:682\n"
+			     + "[08:36:43.885]:[413]:javax.servlet.http.HttpServlet:service: {:682\n"
+			     + "[08:36:43.885]:[413]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
+			     + "[08:36:43.885]:[413]:javax.servlet.http.HttpServlet:service: }:682\n"
+			     + "[08:36:43.885]:[414]:javax.servlet.http.HttpServlet:service: {:682\n"
+			     + "[08:36:43.885]:[414]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
+			     + "[08:36:43.885]:[414]:javax.servlet.http.HttpServlet:service: }:682\n"
+			     + "[08:36:43.885]:[415]:javax.servlet.http.HttpServlet:service: {:682\n"
+			     + "[08:36:43.885]:[415]:javax.servlet.http.HttpServlet:service: {:682\n"
+			     + "[08:36:43.885]:[415]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
+			     + "[08:36:43.885]:[415]:javax.servlet.http.HttpServlet:service: }:682\n"
+			     + "[08:36:43.885]:[415]:javax.servlet.http.HttpServlet:service: }:682\n"
+			     + "[08:36:43.885]:[416]:javax.servlet.http.HttpServlet:service: {:682\n"
+			     + "[08:36:43.885]:[416]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
+			     + "[08:36:43.885]:[416]:javax.servlet.http.HttpServlet:service: }:682\n"
+			     + "[08:36:43.885]:[417]:javax.servlet.http.HttpServlet:service: {:682\n"
+			     + "[08:36:43.885]:[417]:javax.servlet.http.HttpServlet:service: {:682\n"
+			     + "[08:36:43.885]:[417]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
+			     + "[08:36:43.885]:[417]:javax.servlet.http.HttpServlet:service: }:682\n"
+			     + "[08:36:43.885]:[417]:javax.servlet.http.HttpServlet:service: }:682\n"
+			     + "[08:36:43.885]:[418]:javax.servlet.http.HttpServlet:service: {:682\n"
+			     + "[08:36:43.885]:[418]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
+			     + "[08:36:43.885]:[418]:javax.servlet.http.HttpServlet:service: }:682\n"
+			     + "[08:36:43.885]:[419]:javax.servlet.http.HttpServlet:service: {:682\n"
+			     + "[08:36:43.885]:[419]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n"
+			     + "[08:36:43.885]:[419]:javax.servlet.http.HttpServlet:service: }:682\n";
+				
+		List<ITraceEvent> events = TestUtil.createEvents(EVENTS_FROM_MULTIPLE_THREADS_PRISTINE_8);
+		IRequestSeparator requestSeparator = DefaultFactory.getFactory().getRequestSeparator();
+		//requestSeparator.setRequestCompletionEvent(m_requestCompletionEvent);//Whenever this particular event first, that marks the end of a thread/request.
+		requestSeparator.setRequestCompletionFilter( new IncludeThisEventFilterExt(m_requestCompletionEvent2));
+		requestSeparator.setRequestStartFilter( new IncludeThisEventFilterExt(m_requestStartEvent2));
+		
+		m_completedRequests.clear();
+		ICompletedRequestCallback requestCallback = new ICompletedRequestCallback() {
+			
+			@Override
+			public void requestCompleted(IRequest events) {
+				m_completedRequests.add(events);
+			}
+		};
+		requestSeparator.setCompletedRequestCallback(requestCallback);
+		
+		//Simulate events from the InTrace server agent
+		for(ITraceEvent e : events) {
+			requestSeparator.add(e);
+		}
+		//We're expecting one event per request.  Each event will look like this:
+		String rawEventText = "[08:36:43.885]:[419]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)\n";
+		ITraceEvent testEvent = 
+				DefaultFactory.getFactory().getEventParser().createEvent(rawEventText, 0);
+		IncludeThisEventFilterExt myTestFilter = new IncludeThisEventFilterExt();
+		myTestFilter.setFilterCriteria(testEvent);
+		
+		assertEquals("Added eight requests, each with one event, but didn't get eight", 8 /* events.size() */, m_completedRequests.size());
 		for(IRequest request : m_completedRequests) {
 			assertEquals("Expected one event for each request", 1, request.getEvents().size());
 			

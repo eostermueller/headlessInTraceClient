@@ -25,15 +25,16 @@ import ca.odell.glazedlists.EventList;
 public class JdbcClassTest {
 
 	private CountDownLatch latch = null;
+	private boolean m_waitForInstrumentation = false;
 	
 	@Test
 	public void canDetectImplementor() {
 		
 		ClassInstrumentationCommand cic = new ClassInstrumentationCommand();
 		//cic.setIncludeClassRegEx("org.hsqldb.jdbc.jdbcStatement");
-		cic.setIncludeClassRegEx("example.FirstTraceExample");
+		cic.setIncludeClassRegEx(ConnectionTestUtils.TEST_CLASS_TO_INSTRUMENT_1);
 		IAgentCommand commandArray[] = { cic };
-		HostPort hostPort = new HostPort(ConnectionTestUtils.DEFAULT_HOST_1,9123);
+		HostPort hostPort = new HostPort(ConnectionTestUtils.DEFAULT_HOST_1,ConnectionTestUtils.DEFAULT_PORT_1_INT);
 		
 		//Test will fail unless we wait for instrumentation to complete.
 		IConnection c = null;
@@ -42,8 +43,9 @@ public class JdbcClassTest {
 			DefaultCallback callback = new DefaultCallback() {
 				@Override
 				public void setProgress(Map<String, String> progress) {
+					m_waitForInstrumentation = true;
 					String result = progress.get("NUM_PROGRESS_DONE");
-					System.out.println("Found [" + result + "]");
+					System.out.print("."); // kinda a live status update, filling screen with dots.
 					if (result!=null && result.equals("true"))
 						latch.countDown();
 				}
@@ -60,17 +62,20 @@ public class JdbcClassTest {
 			assertEquals("Didn't not connect successfully. [" + DefaultFactory.getFactory().getMessages().getTestSetupInstructions() + "]", true, c.isConnected());
 			
 			//Thread.sleep(120000);
-			System.out.println("x4 Waiting for agent to finish instrumentation");
-			latch.await();
+			if (m_waitForInstrumentation) {
+				System.out.println("x4 Waiting for agent to finish instrumentation");
+				latch.await();
+			}
 			System.out.println("x5 ####%instrumentation finished Connection [" + c.toString() + "]\n");
 			/**
 			 *  V A L I D A T E
 			 *  T R A C E
 			 *  E V E N T S
 			 */
-			dispEvents(c.getTraceEvents());
-			//int traceEventCount = c.getTraceEvents().size();
-			//System.out.println("Found [" + traceEventCount + "] events.");
+			//dispEvents(c.getTraceEvents());
+			Thread.sleep(5000);//collect some events
+			int traceEventCount = c.getTraceEvents().size();
+			System.out.println("Found [" + traceEventCount + "] events.");
 			//assertEquals("Didn't find exepected number of java.sql.PreparedStatement events", 71, traceEventCount);
 			//ITraceEvent event = c.getTraceEvents().get(0);
 			

@@ -14,7 +14,7 @@ import ca.odell.glazedlists.EventList;
 
 import org.intrace.client.filter.ITraceFilterExt;
 import org.intrace.client.filter.ITraceFilter;
-import org.intrace.client.filter.IncludeThisEventFilterExt;
+//import org.intrace.client.filter.IncludeThisEventFilterExt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +33,9 @@ public class DefaultTraceEventWriterImpl implements ITraceWriter {
 			@Override
 			public boolean matches(ITraceEvent traceData) {
 				return true;
-			}});
+			}
+
+			});
 	}
 	private ITraceFilter m_traceFilter = null;
 	private ITraceFilterExt m_traceFilterExt = null;

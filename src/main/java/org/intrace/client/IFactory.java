@@ -7,6 +7,7 @@ import org.intrace.client.model.ITraceEventParser;
 import org.intrace.client.model.DefaultTraceEvent;
 import org.intrace.client.request.IRequest;
 import org.intrace.client.request.IRequestSeparator;
+import org.intrace.jdbc.IJdbcProvider;
 
 public interface IFactory {
 	Config getConfig();
@@ -20,4 +21,5 @@ public interface IFactory {
 	IRequestSeparator getRequestSeparator();
 	IRequest getRequest();
 	IConnectionStateCallback getCallback();
+	IJdbcProvider getJdbcProvider();
 }

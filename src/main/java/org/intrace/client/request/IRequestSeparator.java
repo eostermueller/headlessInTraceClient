@@ -2,6 +2,8 @@ package org.intrace.client.request;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.intrace.client.filter.ITraceFilterExt;
+import org.intrace.client.filter.ITraceFilterExt2;
 import org.intrace.client.model.ITraceEvent;
 
 /**
@@ -19,7 +21,8 @@ public interface IRequestSeparator {
 	 * @param m_requestCompletionEvent
 	 * @when Generally, the consumer should invoke this just one time at startup.
 	 */
-	void setRequestCompletionEvent(ITraceEvent m_requestCompletionEvent);
+	void setRequestCompletionFilter(ITraceFilterExt val);
+	void setRequestStartFilter(ITraceFilterExt val);
 
 	/**
 	 * When the RequestCompletionEvent actually fires, intrace will invoke this method,
@@ -35,7 +38,9 @@ public interface IRequestSeparator {
 	 */
 	void add(ITraceEvent event);
 
-	public abstract int size();
+	int size();
 
-	public abstract ConcurrentHashMap getInFlightRequests();
+	ConcurrentHashMap getInFlightRequests();
+
+
 }

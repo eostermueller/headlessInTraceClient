@@ -30,6 +30,7 @@ import org.intrace.client.connection.IConnection;
 import org.intrace.client.connection.command.ClassInstrumentationCommand;
 import org.intrace.client.connection.command.IAgentCommand;
 import org.intrace.client.filter.IncludeAnyOfTheseEventsFilterExt;
+import org.intrace.client.filter.IncludeThisMethodFilterExt;
 import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.model.ITraceEventParser;
 import org.intrace.client.request.BadCompletedRequestListener;
@@ -100,14 +101,22 @@ public class TestMultiThreadedRequestEventCollection {
 		//This line helps us filter for any prepareStatement call, not just the one with this particular INSERT statement
 		ITraceEvent t1 = parser.createEvent("[15:41:05.294]:[97]:org.hsqldb.jdbc.jdbcConnection:prepareStatement: Arg: INSERT INTO Location (name, address) VALUES(?, ?)", 0);
 		ITraceEvent t2 = parser.createEvent("[15:47:00.909]:[203]:org.intrace.test.webapp.servlet.HelloWorld:doGet: }:50", 0);
-		myCriteriaList.add(t1);myCriteriaList.add(t2);
+		ITraceEvent t3 = parser.createEvent("[15:47:00.909]:[203]:org.intrace.test.webapp.servlet.HelloWorld:doGet: {:50", 0);
+		myCriteriaList.add(t1);myCriteriaList.add(t2);myCriteriaList.add(t3);
 		IncludeAnyOfTheseEventsFilterExt filter = new IncludeAnyOfTheseEventsFilterExt(); 
 		filter.setFilterCriteria(myCriteriaList);
 		m_preConfiguredRequestConnection = new RequestConnection(iterations*numThreads*numEventsPerIteration);
 
 		m_preConfiguredRequestConnection.getTraceWriter().setTraceFilterExt(filter);
 		RequestConnection r = (RequestConnection) m_preConfiguredRequestConnection;
-		r.setRequestCompletionEvent(t2);
+		//r.setRequestCompletionEvent(t2);
+		IncludeThisMethodFilterExt completionMethodFilter = new IncludeThisMethodFilterExt();
+		completionMethodFilter.setFilterCriteria(t2);
+		r.setRequestCompletionFilter(completionMethodFilter);
+		
+		IncludeThisMethodFilterExt startMethodFilter = new IncludeThisMethodFilterExt();
+		startMethodFilter.setFilterCriteria(t3);
+		r.setRequestStartFilter(startMethodFilter);
 		RequestWriter requestWriter = (RequestWriter) m_preConfiguredRequestConnection.getTraceWriter();
 		
 		//Now, we're telling our factory to return our pre-configured connection 

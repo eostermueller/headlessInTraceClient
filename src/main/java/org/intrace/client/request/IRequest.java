@@ -12,10 +12,16 @@ import org.intrace.client.model.ITraceEvent;
  *
  */
 public interface IRequest extends Serializable {
+	boolean isInitialized();
+	void setInitialized(boolean val);
 	List<ITraceEvent> getEvents();
 	void setEvents(List<ITraceEvent> events);
 	void setThreadId(String threadId);
 	public abstract String getThreadId();
 	String getUniqueId();
 	void setUniqueId(String uniqueId);
+	String getUrl();
+	void setUrl(String val);
+	String getHttpResponseCode();
+	void setHttpResponseCode(String val);
 }

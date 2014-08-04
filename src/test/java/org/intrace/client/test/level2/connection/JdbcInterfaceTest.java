@@ -19,74 +19,26 @@ import org.intrace.client.model.ITraceEvent;
 import org.intrace.client.request.BadCompletedRequestListener;
 import org.intrace.client.test.TestUtil;
 import org.intrace.client.test.level2.connection.lowLevel.ConnectionTestUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ca.odell.glazedlists.EventList;
 
+/**
+ * This test casts a wide net and collects a number of events.
+ * Little effort is made to winnow these events down to a small set.
+ * Little validation is done on the result set.
+ * See JdbcRequetTest for a test that targets a small, precise set of events.
+ * @author erikostermueller
+ *
+ */
 public class JdbcInterfaceTest {
 
-	private static final String TEST_INTERFACE = "MyTestInterface";
-	private static final String TEST_IMPLEMENTOR_1 = "MyFirstTestImplementor";
-	private static final String TEST_IMPLEMENTOR_2 = "MySecondTestImplementor";
-	private static final String TEST_PACKAGE = "example";
 	private CountDownLatch latch = null;
+	boolean m_ynWait = false;
 	
-//	@Test
-	public void canConnectAndDisconnect() {
-		IAgentCommand commandArray[] = {  };
-		HostPort hostPort = new HostPort(ConnectionTestUtils.DEFAULT_HOST_1,ConnectionTestUtils.WEB_REQUEST_INTRACE_PORT);
-		
-		//Test will fail unless we wait for instrumentation to complete.
-		IConnection c = null;
-		try {
-			/**
-			 *  C O N N E C T
-			 */
-			
-			c = DefaultConnectionList.getSingleton().connect(null, hostPort, commandArray);
-			System.out.println("####@after connect");
-			System.out.println(" Connection [" + c.toString() + "]\n");
-			
-			
-			assertNotNull("Is the test program started?  Didn't get a connection. [" + DefaultFactory.getFactory().getMessages().getTestSetupInstructions() + "]");
-			assertEquals("Didn't not connect successfully. [" + DefaultFactory.getFactory().getMessages().getTestSetupInstructions() + "]", true, c.isConnected());
-			
-			System.out.println("Waiting for agent to finish instrumentation");
-			System.out.println("####%instrumentation finished");
-			System.out.println(" Connection [" + c.toString() + "]\n");
-			String rc[] = c.getModifiedClasses();
-			System.out.println("Modified classes [" + rc + "]");
-			assertEquals("unable to query for modified classes. ", "java.sql.Statement", rc);
-
-			
-			
-	        //controlThread.sendMessage("[listmodifiedclasses");
-	        //String modifiedClasses = controlThread.getMessage();			
-			
-			c.disconnect();
-
-		} catch (ConnectionTimeout e) {
-			e.printStackTrace();
-			fail("Received a connection timeout.  Is the test program example.FirstTraceExample running? [" + e.getMessage() + "]");
-		} catch (ConnectionException e) {
-			e.printStackTrace();
-			fail("Unknown connection error [" + e.getMessage() + "]");
-		} catch (BadCompletedRequestListener e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} finally {
-			if (c!=null) {
-				c.disconnect();
-				System.out.println(" Connection list [" + DefaultConnectionList.getSingleton().size() + "]");
-				System.out.println("@@ 1 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-				System.out.println(" Connection [" + c.toString() + "]\n");
-				System.out.println("** 2 *********************************************");
-			}
-		}
-		
-	}
 	@Test
-	public void canDetectImplementor() {
+	public void canDetectImplementor() throws Exception {
 		
 		ClassInstrumentationCommand cic = new ClassInstrumentationCommand();
 		cic.setIncludeClassRegEx("java.sql.Statement");
@@ -100,8 +52,9 @@ public class JdbcInterfaceTest {
 			DefaultCallback callback = new DefaultCallback() {
 				@Override
 				public void setProgress(Map<String, String> progress) {
+					m_ynWait = true;
 					String result = progress.get("NUM_PROGRESS_DONE");
-					System.out.println("Found [" + result + "]");
+					System.out.print(".");
 					if (result!=null && result.equals("true"))
 						latch.countDown();
 				}
@@ -110,17 +63,22 @@ public class JdbcInterfaceTest {
 			 *  C O N N E C T
 			 */
 			
-			
-			c = DefaultConnectionList.getSingleton().connect(callback, hostPort, null);
+			c = DefaultConnectionList.getSingleton().connect(callback, hostPort, commandArray);
 			//c = DefaultConnectionList.getSingleton().connect(null, hostPort, null); // may 15 2014
 			System.out.println("x1 ####@after connect");
 			System.out.println("x2 Connection [" + c.toString() + "]\n");
-			boolean ynWait = false;
+			//boolean ynWait = false;
 			String classNames[] = c.getModifiedClasses();
 			if (classNames==null || classNames.length==0) {
-				c.setCommandArray(commandArray);
-				c.executeStartupCommands();
-				ynWait = true;
+				throw new Exception("instrumented classes not set correctly");
+			} else {
+				boolean ynFound = false;
+				for(String myClassName : classNames) {
+					if (myClassName.equals("java.sql.Statement"))
+						ynFound = true;
+				}
+				if (ynFound==false)
+					throw new Exception("agent not configure with java.sql.Statement");
 			}
 			System.out.println("x3 just sent cmd array");
 			
@@ -129,13 +87,13 @@ public class JdbcInterfaceTest {
 			
 			//Thread.sleep(120000);
 			System.out.println("x4 Waiting for agent to finish instrumentation");
-			if (ynWait)
+			if (m_ynWait)
 				latch.await();
 			TestUtil.sendHttpGet("/test/helloExecuteQuery");
 			/**
 			 * Pause to collect some trace events from the Agent running on 9123.
 			 */
-			Thread.sleep(ConnectionTestUtils.EVENT_COLLECTION_TIME_MS);
+			Thread.sleep(4*ConnectionTestUtils.EVENT_COLLECTION_TIME_MS);
 			System.out.println("x5 ####%instrumentation finished");
 			System.out.println("x6 Connection [" + c.toString() + "]\n");
 			/**

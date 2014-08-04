@@ -1,10 +1,5 @@
 package org.intrace.client;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.intrace.client.connection.DefaultCallback;
 import org.intrace.client.connection.DefaultConnection;
@@ -19,6 +14,8 @@ import org.intrace.client.request.DefaultRequest;
 import org.intrace.client.request.DefaultRequestSeparator;
 import org.intrace.client.request.IRequest;
 import org.intrace.client.request.IRequestSeparator;
+import org.intrace.jdbc.HsqldbProvider;
+import org.intrace.jdbc.IJdbcProvider;
 
 /**
  * This is my low-complexity approach to dependency injection.
@@ -129,28 +126,32 @@ public class DefaultFactory implements IFactory {
 	public IConnectionStateCallback getCallback() {
 		return new DefaultCallback();
 	}
-	public static void log(String msg)  {
-		FileWriter fw = null;
-		try {
-			File output = new File("/tmp/InTrace.txt");
-			fw = new FileWriter(output,true);
-			fw.append(msg);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (fw!=null)
-				try {
-					fw.flush();
-					fw.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		}
-		
-		
+	@Override 
+	public IJdbcProvider getJdbcProvider() {
+		return new HsqldbProvider();
 	}
+//	public static void log(String msg)  {
+//		FileWriter fw = null;
+//		try {
+//			File output = new File("/tmp/InTrace.txt");
+//			fw = new FileWriter(output,true);
+//			fw.append(msg);
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			if (fw!=null)
+//				try {
+//					fw.flush();
+//					fw.close();
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//		}
+//		
+//		
+//	}
 	
 
 }

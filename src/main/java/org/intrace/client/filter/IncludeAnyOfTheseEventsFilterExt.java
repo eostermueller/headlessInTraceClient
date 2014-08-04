@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class IncludeAnyOfTheseEventsFilterExt implements ITraceFilterExt {
-    private static final Logger LOG = LoggerFactory.getLogger( IncludeThisEventFilterExt.class.getName() );
+    private static final Logger LOG = LoggerFactory.getLogger( IncludeAnyOfTheseEventsFilterExt.class.getName() );
 	private static final Object CLASS_DELIMITER = "|";
 	List<ITraceEvent> m_criteriaList = null;
 	public void setFilterCriteria(List<ITraceEvent> criteria) {
@@ -18,7 +18,7 @@ public class IncludeAnyOfTheseEventsFilterExt implements ITraceFilterExt {
 	 * in a single string of text -- convenient for copy-n-paste.
 	 * If you want com.ibm.MyClass and com.hp.YourClass, then delimit the multiple classes with a bar (|), like this:
 	 * com.ibm.MyClass|com.hp.YourClass
-	 * in the "classes" instrumentation dialog.
+	 * in the "classes" instrumentation dialog (http://mchr3k.github.io/org.intrace/ui.html).
 	 * This syntax also works when requesting classes to be instrumented via code and the server agent.
 	 * @return
 	 */
@@ -40,10 +40,12 @@ public class IncludeAnyOfTheseEventsFilterExt implements ITraceFilterExt {
 		for( ITraceEvent criteria : m_criteriaList) {
 			if (LOG.isDebugEnabled())  LOG.debug("Comparing [" + traceData.getRawEventData() + "] to [" + m_criteriaList.size() + "] criteria [" + criteria.toString() +  "]");
 
-			if (criteria.getEventType()==traceData.getEventType()
-					&& criteria.getClassName().equals(traceData.getClassName())
-					&& criteria.getMethodName().equals(traceData.getMethodName())
-					) {
+//			if (criteria.getEventType()==traceData.getEventType()
+////					&& criteria.getClassName().equals(traceData.getClassName())
+//					&& criteria.getMethodName().equals(traceData.getMethodName())
+//					) 
+			
+			if (criteria.getMethodName().equals(traceData.getMethodName() )) {
 						if (LOG.isDebugEnabled())  LOG.debug("Found match for [" + traceData.getRawEventData() + "] to [" + m_criteriaList.size() + "] criteria ");
 						return true;
 					} 
