@@ -7,13 +7,13 @@ mkdir -p $LOG_PATH
 
 
 mvn -f $(dirname $0)/../pom.xml \
-	-Dintrace.test.class=example.FirstTraceExample \
+	-Dheadlessintrace.test.class=example.FirstTraceExample \
 	antrun:run 1> $LOG_PATH/out.1 2>&1 &
 
 sleep 5
 
 mvn -f $(dirname $0)/../pom.xml \
-	-Dintrace.test.class=example.SecondTraceExample \
+	-Dheadlessintrace.test.class=example.SecondTraceExample \
 	antrun:run 1> $LOG_PATH/out.2 2>&1 &
 
 sleep 5

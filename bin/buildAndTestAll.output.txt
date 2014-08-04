@@ -235,34 +235,34 @@ main:
 -------------------------------------------------------
  T E S T S
 -------------------------------------------------------
-Running org.intrace.client.test.level1.connection.TestHostPortTextl
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.043 sec - in org.intrace.client.test.level1.connection.TestHostPortTextl
-Running org.intrace.client.test.level1.model.TestEventParsing
-Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 sec - in org.intrace.client.test.level1.model.TestEventParsing
-Running org.intrace.client.test.level1.model.TestEventParsingWithLineNumbers
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec - in org.intrace.client.test.level1.model.TestEventParsingWithLineNumbers
-Running org.intrace.client.test.level1.request.TestMultiThreadedRequestSeparator
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.697 sec - in org.intrace.client.test.level1.request.TestMultiThreadedRequestSeparator
-Running org.intrace.client.test.level1.request.TestRequestSeparator
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec - in org.intrace.client.test.level1.request.TestRequestSeparator
-Running org.intrace.client.test.level2.connection.lowLevel.TestBasicConnection_RequiresExternalAgent
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.13 sec - in org.intrace.client.test.level2.connection.lowLevel.TestBasicConnection_RequiresExternalAgent
-Running org.intrace.client.test.level2.connection.lowLevel.TestMultipleConnections_requiresTwoExternalAgents
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.027 sec - in org.intrace.client.test.level2.connection.lowLevel.TestMultipleConnections_requiresTwoExternalAgents
-Running org.intrace.client.test.level2.connection.lowLevel.TestOtherBasicConnection_RequiresExternalAgent
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.009 sec - in org.intrace.client.test.level2.connection.lowLevel.TestOtherBasicConnection_RequiresExternalAgent
-Running org.intrace.client.test.level2.connection.TestCollectionOfSpecificEvents
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.002 sec - in org.intrace.client.test.level2.connection.TestCollectionOfSpecificEvents
-Running org.intrace.client.test.level2.connection.TestConnection
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 sec - in org.intrace.client.test.level2.connection.TestConnection
-Running org.intrace.client.test.level2.connection.TestEventCollection
+Running org.headlessintrace.client.test.level1.connection.TestHostPortTextl
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.043 sec - in org.headlessintrace.client.test.level1.connection.TestHostPortTextl
+Running org.headlessintrace.client.test.level1.model.TestEventParsing
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 sec - in org.headlessintrace.client.test.level1.model.TestEventParsing
+Running org.headlessintrace.client.test.level1.model.TestEventParsingWithLineNumbers
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec - in org.headlessintrace.client.test.level1.model.TestEventParsingWithLineNumbers
+Running org.headlessintrace.client.test.level1.request.TestMultiThreadedRequestSeparator
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.697 sec - in org.headlessintrace.client.test.level1.request.TestMultiThreadedRequestSeparator
+Running org.headlessintrace.client.test.level1.request.TestRequestSeparator
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec - in org.headlessintrace.client.test.level1.request.TestRequestSeparator
+Running org.headlessintrace.client.test.level2.connection.lowLevel.TestBasicConnection_RequiresExternalAgent
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.13 sec - in org.headlessintrace.client.test.level2.connection.lowLevel.TestBasicConnection_RequiresExternalAgent
+Running org.headlessintrace.client.test.level2.connection.lowLevel.TestMultipleConnections_requiresTwoExternalAgents
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.027 sec - in org.headlessintrace.client.test.level2.connection.lowLevel.TestMultipleConnections_requiresTwoExternalAgents
+Running org.headlessintrace.client.test.level2.connection.lowLevel.TestOtherBasicConnection_RequiresExternalAgent
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.009 sec - in org.headlessintrace.client.test.level2.connection.lowLevel.TestOtherBasicConnection_RequiresExternalAgent
+Running org.headlessintrace.client.test.level2.connection.TestCollectionOfSpecificEvents
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.002 sec - in org.headlessintrace.client.test.level2.connection.TestCollectionOfSpecificEvents
+Running org.headlessintrace.client.test.level2.connection.TestConnection
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 sec - in org.headlessintrace.client.test.level2.connection.TestConnection
+Running org.headlessintrace.client.test.level2.connection.TestEventCollection
 Found [964] events.
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.003 sec - in org.intrace.client.test.level2.connection.TestEventCollection
-Running org.intrace.client.test.level2.connection.TestEventFilterExt
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.004 sec - in org.intrace.client.test.level2.connection.TestEventFilterExt
-Running org.intrace.client.test.level3.request.TestRequestEventCollection
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.003 sec - in org.headlessintrace.client.test.level2.connection.TestEventCollection
+Running org.headlessintrace.client.test.level2.connection.TestEventFilterExt
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.004 sec - in org.headlessintrace.client.test.level2.connection.TestEventFilterExt
+Running org.headlessintrace.client.test.level3.request.TestRequestEventCollection
      [java] Event [date=11/3/13 12:36 PM, description=description, id=0, location=Location [address=1 high street, id=0, name=location], name=event name]
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.36 sec - in org.intrace.client.test.level3.request.TestRequestEventCollection
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.36 sec - in org.headlessintrace.client.test.level3.request.TestRequestEventCollection
 
 Results :
 

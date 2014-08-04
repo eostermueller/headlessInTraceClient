@@ -10,7 +10,7 @@ c) execute bin/buildAndTestAll.sh.  Current directory does not matter.
 Main Features
 ---------------------------------
 1) Support for collecting events from multiple intrace agents on multiple hosts/ports
-	For details, see org.intrace.client.test.level2.connection.lowLevel.TestMultipleConnections_requiresTwoExternalAgents
+	For details, see org.headlessintrace.client.test.level2.connection.lowLevel.TestMultipleConnections_requiresTwoExternalAgents
 
 2) Test infrastructure captures intrace events from the example webapp, 
 	which is deployed to Jetty by maven and used during JUnit tests.
@@ -19,7 +19,7 @@ Main Features
 
 3) Can optionally group all events that belong to a single stateless request, like a SOA request.  
 	Includes a callback class that will notify you when all events from each request are complete.
-	For details, see org.intrace.client.test.level3.request.TestRequestEventCollection
+	For details, see org.headlessintrace.client.test.level3.request.TestRequestEventCollection
 
 4) Initial support for multi-language support for human-readable messages.
 
