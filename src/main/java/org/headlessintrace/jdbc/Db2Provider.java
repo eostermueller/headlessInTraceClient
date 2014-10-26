@@ -1,23 +1,30 @@
 package org.headlessintrace.jdbc;
 
 
-public class OracleProvider implements IJdbcProvider {
+public class Db2Provider implements IJdbcProvider {
 
 	@Override
 	public String[] getStatementPackageAndClass() {
-		String[] a = {"oracle.jdbc.driver.OracleStatement"}; 
+		String[] a = {
+				"com.ibm.db2.jcc.DB2Statement"
+		};
 		return a;
 	}
 
 	@Override
 	public String[] getConnectionPackageAndClass() {
-		String[] a = {"oracle.jdbc.driver.PhysicalConnection"}; 
+		String[] a = {
+				 "com.ibm.db2.jcc.b.bb"
+		}; 
+		
 		return a;
 	}
 
 	@Override
 	public String getVersion() {
-		return "unk";
+		return "10.5";
 	}
 
 }
+
+
