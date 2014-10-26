@@ -6,7 +6,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   <groupId>com.github.eostermueller</groupId>
   <artifactId>headlessInTraceClient</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
   <name>${project.groupId}:${project.artifactId}</name>
   <description>A headless java API that collects events from other JVMs. Events=method invocations. Initial code taken from http://mchr3k.github.io/org.intrace/. Intended for building diagnostic applications.</description>
   <url>https://github.com/eostermueller/headlessInTraceClient</url>
