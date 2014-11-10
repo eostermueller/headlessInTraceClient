@@ -134,4 +134,6 @@ public interface ITraceEvent {
 	public void setStackTrace(StackTraceElement[] stackTrace);
 
 	public StackTraceElement[] getStackTrace();
+
+	public String getAgentDateTimeString();
 }

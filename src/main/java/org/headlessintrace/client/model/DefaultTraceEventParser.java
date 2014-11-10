@@ -1,6 +1,10 @@
 package org.headlessintrace.client.model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.headlessintrace.client.DefaultFactory;
@@ -60,18 +64,33 @@ public class DefaultTraceEventParser implements ITraceEventParser {
 		return ste;
 	}
 	/**
-	 * 
+	 * @param Date
 	 * @param string in this format:  18:07:53.681
 	 * @return number of milliseconds since midnight.
 	 * @throws IntraceException 
 	 */
-	static public long convertInTraceAgentTimeFmtToLong(String string) throws IntraceException {
+	static public Date convertInTraceAgentTimeFmt(Date d, String stringTime) throws IntraceException {
 		
-		//18:07:53.681
+		if (d==null )
+			throw new IntraceException("expecting non-null date");
+		if (stringTime==null)
+			throw new IntraceException("expecting non-null time");
+		
+		if (stringTime.trim().length() < 9)
+			throw new IntraceException("Expecting at least 9 ascii charaters for a format like 18:07:53.681 but instead got [" + stringTime + "]");
+		GregorianCalendar gcDate = new GregorianCalendar();
+		gcDate.setTime(d);
+		int year       = gcDate.get(Calendar.YEAR);
+		int month      = gcDate.get(Calendar.MONTH); // Jan = 0, dec = 11
+		int dayOfMonth = gcDate.get(Calendar.DAY_OF_MONTH); 
+
+		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss.SSS");	
+		//System.out.println("DTEP 1: [" + sdf.format(gcDate.getTime()) + "]");
+		
 		String delimsRegEx = "[:.]";
-		String[] timeParts = string.split(delimsRegEx);
+		String[] timeParts = stringTime.split(delimsRegEx);
 		if (timeParts.length!=4)
-			throw new IntraceException("Received invalid date [" + string + "].  Was expecting 4 pices 'split' by regex [" + delimsRegEx + "]");
+			throw new IntraceException("Expecting a date formatted like 18:07:53.681.  Expecting 4 parts but instead got [" + timeParts + "] from text [" + stringTime + "].  Was expecting 4 pices 'split' by regex [" + delimsRegEx + "]");
 
 		int militaryHours = UNINIT;
 		int minutes = UNINIT;
@@ -85,14 +104,20 @@ public class DefaultTraceEventParser implements ITraceEventParser {
 			millis = Integer.parseInt(timeParts[3]);
 			
 		} catch (NumberFormatException nfe) {
-			throw new IntraceException(nfe,"Unparseable InTrace data [" + string + "]");
+			throw new IntraceException(nfe,"Unparseable InTrace data [" + stringTime + "]");
 		}
+		Calendar calendar = new GregorianCalendar(
+				year,
+				month,
+				dayOfMonth,
+				militaryHours,
+				minutes,
+				seconds);
+		calendar.set(Calendar.MILLISECOND, millis);
+//		System.out.println("DTEP 2: [" + sdf.format(calendar.getTime()) + "]");
+//		System.out.println("DTEP 3: [" + calendar.getTime().getTime() + "]");
 		
-		militaryHours *= 60*60*1000;
-		minutes *= 60*1000;
-		seconds *= 1000;
-		
-		return militaryHours+minutes+seconds+millis;
+		return calendar.getTime();
 	}
 
 	/* 
@@ -159,6 +184,29 @@ public class DefaultTraceEventParser implements ITraceEventParser {
 		
 		return elements.toArray(new StackTraceElement[elements.size()]);
 	}
+	/**
+	 * set the give time properties (hour/minute/sec/milli) onto the give data object.
+	 * @param date
+	 * @param time
+	 * @return
+	 * @throws IntraceException
+	 */
+	public static long applyTimeToDate(Date date, Date time) throws IntraceException {
+		
+		Calendar dateCal = new GregorianCalendar();
+		dateCal.setTime(date);
+		Calendar timeCal = new GregorianCalendar();
+		dateCal.setTime(time);
+		
+		dateCal.set(Calendar.HOUR_OF_DAY, timeCal.get(Calendar.HOUR_OF_DAY )); // 24 hour clock
+		dateCal.set(Calendar.MINUTE, timeCal.get(Calendar.MINUTE ));
+		
+		dateCal.set(Calendar.SECOND, timeCal.get(Calendar.SECOND));
+		dateCal.set(Calendar.MILLISECOND, timeCal.get(Calendar.MILLISECOND));	
+		
+		
+		return dateCal.getTimeInMillis();
+	}
 
 }
 class OtherTraceEventParser implements ITraceEventParser {
@@ -182,7 +230,8 @@ class OtherTraceEventParser implements ITraceEventParser {
 		if (pieces.length != 5) {
 			throw new RuntimeException("Expecting 5 parts (but got [" + pieces.length + "]) when parsing square brackets in raw text [" + rawEventText + "]");
 		}
-		event.setAgentTimeMillis(DefaultTraceEventParser.convertInTraceAgentTimeFmtToLong(pieces[1]));
+		Date d = DefaultTraceEventParser.convertInTraceAgentTimeFmt(new Date(), pieces[1]);
+		event.setAgentTimeMillis(d.getTime());
 		event.setThreadId(pieces[3]);
 		int indexOfDebug = rawEventText.indexOf(DEBUG_EVENT_INDICATOR);
 		
@@ -273,7 +322,8 @@ class EntryAndExitTraceEventParser implements ITraceEventParser {
 				[4]	":org.hsqldb.jdbc.jdbcStatement:<init>: }" (id=82)	
 		 */
 		
-		event.setAgentTimeMillis( DefaultTraceEventParser.convertInTraceAgentTimeFmtToLong(pieces[1]));
+		Date d = DefaultTraceEventParser.convertInTraceAgentTimeFmt(new Date(), pieces[1]);
+		event.setAgentTimeMillis( d.getTime() );
 		event.setThreadId(pieces[3]);
 		
 		String[] colonSeparatedPieces = pieces[4].split(":");

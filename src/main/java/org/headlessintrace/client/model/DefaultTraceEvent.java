@@ -1,6 +1,9 @@
 package org.headlessintrace.client.model;
 
-import org.headlessintrace.client.model.ITraceEvent.EventType;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 /**
  * A pojo "Value Object"  -- not much code here, just data.
@@ -8,7 +11,6 @@ import org.headlessintrace.client.model.ITraceEvent.EventType;
  *
  */
 public class DefaultTraceEvent implements ITraceEvent, java.io.Serializable {
-
 	private static final String DELIMIT = ":";
 	private static final long LONG_UNINIT = -1L;
 
@@ -32,6 +34,9 @@ public class DefaultTraceEvent implements ITraceEvent, java.io.Serializable {
 		setRawEventData(rawEventData);
 		setPackageName(packageName);
 		setClassName(className);
+		
+		Date d = new Date();
+		
 		setAgentTimeMillis(agentTimeMillis);
 		setMethodName(methodName);
 		setEventType(eventType);
@@ -47,6 +52,12 @@ public class DefaultTraceEvent implements ITraceEvent, java.io.Serializable {
 	public StackTraceElement[] getStackTrace() {
 		return m_stackTrace;
 	}
+//	@Override 
+//	public String getAgentDateTimeString() {
+//		DateTime dt = new DateTime();
+//	    DateTimeFormatter fmt = DateTimeFormat.forPattern("MM/dd.YYYY");
+//	    String str = fmt.print(dt);		
+//	}
 	@Override
 	public void setStackTrace(StackTraceElement[] stackTrace) {
 		this.m_stackTrace = stackTrace;
@@ -233,6 +244,17 @@ public class DefaultTraceEvent implements ITraceEvent, java.io.Serializable {
 		} else {
 			return getPackageAndClass() + DELIMIT + getEventType();
 		}
+	}
+    private static final String SIMPLE_DATE_FORMAT_PATTERN = "yyyy-MM-dd kk:mm:ss.SSS";
+	private SimpleDateFormat dateFormat = new SimpleDateFormat(SIMPLE_DATE_FORMAT_PATTERN);
+    public synchronized String format(Date date) {
+        return dateFormat.format(date);
+    }
+	@Override
+	public String getAgentDateTimeString() {
+		Date d = new Date(this.getAgentTimeMillis());
+		
+		return format(d);
 	}
 
 

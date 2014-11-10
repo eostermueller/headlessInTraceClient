@@ -2,6 +2,11 @@ package org.headlessintrace.client.test.level1.model;
 
 import static org.junit.Assert.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import org.headlessintrace.client.IntraceException;
 import org.headlessintrace.client.model.DefaultTraceEventParser;
 import org.headlessintrace.client.model.ITraceEvent;
@@ -48,8 +53,12 @@ import org.junit.Test;
  *
  */
 public class TestEventParsing {
-	private static final long EXPECTED_TIMESTAMP = 46090792L;/*"12:48:10.792"*/
-	private static final long EXPECTED_TIMESTAMP_2 = 65273681;/*"18:07:53.681"*/
+	//private static final long EXPECTED_TIMESTAMP = 46090792L;/*"12:48:10.792"*/
+	private static final long EXPECTED_TIMESTAMP = 1415299690792L;/*"12:48:10.792"*/
+	
+	//eto private static final long EXPECTED_TIMESTAMP_2 = 65273681;/*"18:07:53.681"*/
+	private static final long EXPECTED_TIMESTAMP_2 = 1415318873681l;/*"18:07:53.681"*/
+
 	ITraceEventParser m_eventParser = new DefaultTraceEventParser();
 
 
@@ -72,7 +81,7 @@ public class TestEventParsing {
 				rawEventText,						//raw event text
 				"org.hsqldb.jdbc",					//package
 				"jdbcConnection",					//class
-				EXPECTED_TIMESTAMP_2/*"18:07:53.681"*/,						//time in millis
+				setCurrDate(EXPECTED_TIMESTAMP_2)/*"18:07:53.681"*/,						//time in millis
 				"prepareStatement",					//method
 				EventType.ENTRY,					//trace event type
 				null,								//arg or return value
@@ -92,7 +101,8 @@ public class TestEventParsing {
 				rawEventText,						//raw event text
 				"org.hsqldb.jdbc",					//package
 				"jdbcConnection",					//class
-				EXPECTED_TIMESTAMP_2/*"18:07:53.681"*/,						//time in millis
+				setCurrDate(EXPECTED_TIMESTAMP_2)/*"18:07:53.681"*/,						//time in millis
+				//setCurrDate(1415318873681l),
 				"prepareStatement",					//method
 				EventType.ARG,						//trace event type
 				"INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)",								//arg or return value
@@ -111,7 +121,7 @@ public class TestEventParsing {
 				rawEventText,						//raw event text
 				"org.hsqldb.jdbc",	//package
 				"jdbcConnection",					//class
-				EXPECTED_TIMESTAMP_2/*"18:07:53.681"*/,									//time in millis
+				setCurrDate(EXPECTED_TIMESTAMP_2)/*"18:07:53.681"*/,									//time in millis
 				"checkClosed",					//method
 				EventType.ENTRY,					//trace event type
 				null,								//arg or return value
@@ -129,7 +139,7 @@ public class TestEventParsing {
 				rawEventText,						//raw event text
 				"org.hsqldb.jdbc",	//package
 				"jdbcConnection",					//class
-				EXPECTED_TIMESTAMP_2/*"18:07:53.681"*/,									//time in millis
+				setCurrDate(EXPECTED_TIMESTAMP_2)/*"18:07:53.681"*/,									//time in millis
 				"checkClosed",					//method
 				EventType.EXIT,					//trace event type
 				null,								//arg or return value
@@ -148,7 +158,7 @@ public class TestEventParsing {
 				rawEventText,						//raw event text
 				"org.hsqldb.jdbc",	//package
 				"jdbcStatement",					//class
-				EXPECTED_TIMESTAMP_2/*"18:07:53.681"*/,									//time in millis
+				setCurrDate(EXPECTED_TIMESTAMP_2)/*"18:07:53.681"*/,									//time in millis
 				"<init>",							//method
 				EventType.ENTRY,					//trace event type
 				null,								//arg or return value
@@ -167,7 +177,7 @@ public class TestEventParsing {
 				rawEventText,						//raw event text
 				"org.hsqldb.jdbc",	//package
 				"jdbcStatement",					//class
-				EXPECTED_TIMESTAMP_2/*"18:07:53.681"*/,									//time in millis
+				setCurrDate(EXPECTED_TIMESTAMP_2)/*"18:07:53.681"*/,									//time in millis
 				"<init>",							//method
 				EventType.ARG,					//trace event type
 				"org.hsqldb.jdbc.jdbcConnection@682f8c99",								//arg or return value
@@ -186,7 +196,7 @@ public class TestEventParsing {
 				rawEventText,						//raw event text
 				"org.hsqldb.jdbc",	//package
 				"jdbcStatement",					//class
-				EXPECTED_TIMESTAMP_2/*"18:07:53.681"*/,									//time in millis
+				setCurrDate(EXPECTED_TIMESTAMP_2)/*"18:07:53.681"*/,									//time in millis
 				"<init>",							//method
 				EventType.ARG,					//trace event type
 				"1003",								//arg or return value
@@ -208,7 +218,7 @@ public class TestEventParsing {
 				rawEventText,						//raw event text
 				"org.hsqldb.jdbc",	//package
 				"jdbcStatement",					//class
-				EXPECTED_TIMESTAMP_2/*"18:07:53.681"*/,									//time in millis
+				setCurrDate(EXPECTED_TIMESTAMP_2)/*"18:07:53.681"*/,									//time in millis
 				"<init>",							//method
 				EventType.EXIT,					//trace event type
 				null,								//arg or return value
@@ -233,7 +243,7 @@ public class TestEventParsing {
 				rawEventText,						//raw event text
 				"org.hsqldb.jdbc",	//package
 				"jdbcConnection",					//class
-				EXPECTED_TIMESTAMP_2/*"18:07:53.681"*/,									//time in millis
+				setCurrDate(EXPECTED_TIMESTAMP_2)/*"18:07:53.681"*/,									//time in millis
 				"nativeSQL",							//method
 				EventType.RETURN,					//trace event type
 				"INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)",								//arg or return value
@@ -259,7 +269,8 @@ public class TestEventParsing {
 				rawEventText,						//raw event text
 				"org.hsqldb.jdbc",	//package
 				"jdbcConnection",					//class
-				65273683/*"18:07:53.683"*/,									//time in millis
+				//setCurrDate(65273683)/*"18:07:53.683"*/,									//time in millis
+				setCurrDate(1415318873683l),
 				"prepareStatement",							//method
 				EventType.RETURN,					//trace event type
 				"org.hsqldb.jdbc.jdbcPreparedStatement@4b8efa2f[sql=[INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)], parameters=[[null], [null], [null], [null]]]",								//arg or return value
@@ -294,7 +305,7 @@ public class TestEventParsing {
 				rawEventText,						//raw event text
 				"org.headlessintrace.test.webapp.servlet",	//package
 				"HelloWorld",					//class
-				44536792/*"12:22:16.819"*/,									//time in millis
+				setCurrDate(44536792)/*"12:22:16.819"*/,									//time in millis
 				"getStackTraceElementAsString",							//method
 				EventType.ARG,					//trace event type
 				"org.hsqldb.jdbc.jdbcPreparedStatement@4b8efa2f[sql=[INSERT INTO Event (name, description, date, location) VALUES(?, ?, ?, ?)], parameters=[[null], [null], [null], [null]]]",								//arg or return value
@@ -314,7 +325,7 @@ public class TestEventParsing {
 				rawEventText,						//raw event text
 				"org.headlessintrace.test.webapp.servlet",	//package
 				"HelloWorld",					//class
-				EXPECTED_TIMESTAMP/*"12:48:10.792"*/,					//time in millis
+				setCurrDate(EXPECTED_TIMESTAMP)/*"12:48:10.792"*/,					//time in millis
 				"doGet",							//method
 				EventType.ARG,					//trace event type
 				"org.apache.catalina.connector.RequestFacade@c2aa254",								//arg or return value
@@ -327,10 +338,11 @@ public class TestEventParsing {
 	}
 	@Test
 	public void canParseTimestamp() throws IntraceException {
+//		String rawEventText = "[12:48:10.792]:[59]:org.headlessintrace.test.webapp.servlet.HelloWorld:doGet: Arg (request): org.apache.catalina.connector.RequestFacade@c2aa254";
 		String rawEventText = "[12:48:10.792]:[59]:org.headlessintrace.test.webapp.servlet.HelloWorld:doGet: Arg (request): org.apache.catalina.connector.RequestFacade@c2aa254";
 		ITraceEvent actualEvent = m_eventParser.createEvent(rawEventText,0);
 		
-		assertEquals("Can't find string-version of timestamp.", EXPECTED_TIMESTAMP /*"12:48:10.792"*/, actualEvent.getAgentTimeMillis());
+		assertEquals("Can't find string-version of timestamp.", setCurrDate(EXPECTED_TIMESTAMP) /*"12:48:10.792"*/, actualEvent.getAgentTimeMillis());
 		
 		//792			=     792
 		//10*1000		=   10000
@@ -338,7 +350,7 @@ public class TestEventParsing {
 		//12*1000*60*60	=43200000
 		//Grand total:   46090792
 		
-		assertEquals("Can't parse timestamp (ms)", 46090792, actualEvent.getAgentTimeMillis());
+//		assertEquals("Can't parse timestamp (ms)", setCurrDate(46090792), actualEvent.getAgentTimeMillis());
 	}
 	@Test
 	public void canParseDebugEvent() throws IntraceException {
@@ -349,7 +361,7 @@ public class TestEventParsing {
 				rawEventText,						//raw event text
 				null,	//package
 				null,					//class
-				EXPECTED_TIMESTAMP/*"12:48:10.792"*/,					//time in millis
+				setCurrDate(EXPECTED_TIMESTAMP)/*"12:48:10.792"*/,					//time in millis
 				null,							//method
 				EventType.DEBUG,					//trace event type
 				null,								//arg or return value
@@ -369,5 +381,65 @@ public class TestEventParsing {
 		assertEquals("Could not find Argument name", expectedEvent.getArgName(), actualEvent.getArgName());
 	}
 	
+	/**
+	 * 
+	 * @param time
+	 * @return given time with the current date.
+	 * @throws IntraceException
+	 */
+	static public long setCurrDate(long time) throws IntraceException {
+		Date currentDate = new Date();
+		Date objTime = new Date(time);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss.SSS");	
+		
+//		System.out.println("In Test util 1, starting with date: [" + sdf.format(currentDate) + "]");
+//		System.out.println("In Test util 2, starting with time: [" + sdf.format(objTime) + "]");
+		
+		Calendar calTime = new GregorianCalendar();
+		calTime.setTime(objTime);
+		Calendar calDate = new GregorianCalendar();
+		calDate.setTime(currentDate);
+		
+		Calendar calDateTime = new GregorianCalendar();
+		
+		calDateTime.set(Calendar.YEAR,			calDate.get(Calendar.YEAR) );
+		calDateTime.set(Calendar.MONTH,			calDate.get(Calendar.MONTH) );
+		calDateTime.set(Calendar.DAY_OF_MONTH,	calDate.get(Calendar.DAY_OF_MONTH) );
+
+//		System.out.println("hourOfDay \t: " + calTime.get(Calendar.HOUR_OF_DAY));
+//		System.out.println("minute \t\t: " + calTime.get(Calendar.MINUTE));
+//		System.out.println("second \t\t: " + calTime.get(Calendar.SECOND));
+//		System.out.println("millisecond \t: " + calTime.get(Calendar.MILLISECOND));		
+		
+		calDateTime.set(Calendar.HOUR_OF_DAY,	calTime.get(Calendar.HOUR_OF_DAY)); // 24 hour clock
+		calDateTime.set(Calendar.MINUTE,		calTime.get(Calendar.MINUTE));
+		calDateTime.set(Calendar.SECOND,		calTime.get(Calendar.SECOND));
+		calDateTime.set(Calendar.MILLISECOND,	calTime.get(Calendar.MILLISECOND));
+		
+//		System.out.println("In Test util 3, starting with time: [" + sdf.format(calDateTime.getTime()) + "]");
+		
+		return calDateTime.getTime().getTime();
+	}
+	static public long addCurrDate_ORIG(long time) throws IntraceException {
+		Date currentDate = new Date();
+		Date objTime = new Date(time);
+		
+		String delimsRegEx = "[:.]";
+
+		Calendar calTime = new GregorianCalendar();
+		calTime.setTime(objTime);
+		
+		
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(currentDate);
+		
+		calendar.set(Calendar.HOUR_OF_DAY,calTime.get(Calendar.HOUR_OF_DAY)); // 24 hour clock
+		calendar.set(Calendar.MINUTE,calTime.get(Calendar.MINUTE));
+		calendar.set(Calendar.SECOND,calTime.get(Calendar.SECOND));
+		calendar.set(Calendar.MILLISECOND,calTime.get(Calendar.MILLISECOND));
+		
+		return calendar.getTime().getTime();
+	}
 
 }
